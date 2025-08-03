@@ -5,7 +5,7 @@ extends Control
 
 func _ready() -> void:
 	# Removes mouse input from the game
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	#Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
 	# Connects buttons to this object
 	_enemies_menu.connect_buttons_to_object(self, "enemy_button")

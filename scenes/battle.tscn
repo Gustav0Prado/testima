@@ -97,6 +97,7 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 script = ExtResource("3_p1qf1")
+focus_on_start = true
 
 [node name="Left" type="VBoxContainer" parent="Menu/Options/Menu"]
 layout_mode = 2
