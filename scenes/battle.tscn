@@ -1,0 +1,199 @@
+[gd_scene load_steps=4 format=3 uid="uid://dio6bbyyqw0oa"]
+
+[ext_resource type="PackedScene" uid="uid://bgdpiqserfoe2" path="res://scenes/window_default.tscn" id="1_dn72j"]
+[ext_resource type="Script" uid="uid://erbwokh55aws" path="res://scripts/battle.gd" id="1_th188"]
+[ext_resource type="Script" uid="uid://deyp1pxmh7o0h" path="res://scripts/menu.gd" id="3_p1qf1"]
+
+[node name="Battle" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_th188")
+metadata/_edit_lock_ = true
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+metadata/_edit_lock_ = true
+
+[node name="Menu" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 135.0
+offset_right = 315.0
+offset_bottom = 175.0
+
+[node name="Enemies" parent="Menu" instance=ExtResource("1_dn72j")]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Menu/Enemies"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.039604
+anchor_right = 0.960396
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Menu/Enemies/VBoxContainer"]
+layout_mode = 2
+
+[node name="EnemyNames" type="Label" parent="Menu/Enemies/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Evil enemies >:("
+
+[node name="EnemyNumber" type="Label" parent="Menu/Enemies/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "5"
+
+[node name="Options" parent="Menu" instance=ExtResource("1_dn72j")]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+
+[node name="Menu" type="HBoxContainer" parent="Menu/Options"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+script = ExtResource("3_p1qf1")
+
+[node name="Left" type="VBoxContainer" parent="Menu/Options/Menu"]
+layout_mode = 2
+alignment = 1
+
+[node name="Attack" type="Button" parent="Menu/Options/Menu/Left"]
+layout_mode = 2
+text = "Attack"
+flat = true
+
+[node name="Defend" type="Button" parent="Menu/Options/Menu/Left"]
+layout_mode = 2
+text = "Defend"
+flat = true
+
+[node name="Right" type="VBoxContainer" parent="Menu/Options/Menu"]
+layout_mode = 2
+alignment = 1
+
+[node name="Items" type="Button" parent="Menu/Options/Menu/Right"]
+layout_mode = 2
+text = "Items"
+flat = true
+
+[node name="Run" type="Button" parent="Menu/Options/Menu/Right"]
+layout_mode = 2
+text = "Run"
+flat = true
+
+[node name="Top" parent="Menu" instance=ExtResource("1_dn72j")]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Menu/Top"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = -2.0
+offset_right = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="Names" type="VBoxContainer" parent="Menu/Top/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = -4
+
+[node name="P1" type="Label" parent="Menu/Top/HBoxContainer/Names"]
+layout_mode = 2
+text = "Playername"
+
+[node name="P2" type="Label" parent="Menu/Top/HBoxContainer/Names"]
+layout_mode = 2
+text = "Playername"
+
+[node name="P3" type="Label" parent="Menu/Top/HBoxContainer/Names"]
+layout_mode = 2
+text = "Playername"
+
+[node name="P4" type="Label" parent="Menu/Top/HBoxContainer/Names"]
+layout_mode = 2
+text = "Playername"
+
+[node name="LVLs" type="VBoxContainer" parent="Menu/Top/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = -4
+
+[node name="P1" type="Label" parent="Menu/Top/HBoxContainer/LVLs"]
+layout_mode = 2
+text = "00"
+
+[node name="P2" type="Label" parent="Menu/Top/HBoxContainer/LVLs"]
+layout_mode = 2
+text = "00"
+
+[node name="P3" type="Label" parent="Menu/Top/HBoxContainer/LVLs"]
+layout_mode = 2
+text = "00"
+
+[node name="P4" type="Label" parent="Menu/Top/HBoxContainer/LVLs"]
+layout_mode = 2
+text = "00"
+
+[node name="HPs" type="VBoxContainer" parent="Menu/Top/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = -4
+
+[node name="P1" type="Label" parent="Menu/Top/HBoxContainer/HPs"]
+layout_mode = 2
+text = "00"
+
+[node name="P2" type="Label" parent="Menu/Top/HBoxContainer/HPs"]
+layout_mode = 2
+text = "00"
+
+[node name="P3" type="Label" parent="Menu/Top/HBoxContainer/HPs"]
+layout_mode = 2
+text = "00"
+
+[node name="P4" type="Label" parent="Menu/Top/HBoxContainer/HPs"]
+layout_mode = 2
+text = "00"
+
+[node name="MPs" type="VBoxContainer" parent="Menu/Top/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = -4
+
+[node name="P1" type="Label" parent="Menu/Top/HBoxContainer/MPs"]
+layout_mode = 2
+text = "00"
+
+[node name="P2" type="Label" parent="Menu/Top/HBoxContainer/MPs"]
+layout_mode = 2
+text = "00"
+
+[node name="P3" type="Label" parent="Menu/Top/HBoxContainer/MPs"]
+layout_mode = 2
+text = "00"
+
+[node name="P4" type="Label" parent="Menu/Top/HBoxContainer/MPs"]
+layout_mode = 2
+text = "00"
+
+[connection signal="button_focused" from="Menu/Options/Menu" to="." method="_on_menu_button_focused"]
+[connection signal="button_pressed" from="Menu/Options/Menu" to="." method="_on_menu_button_pressed"]

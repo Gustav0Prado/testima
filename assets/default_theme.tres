@@ -1,0 +1,13 @@
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://drbgeaev8rwrx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o54fn"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qew4h"]
+
+[resource]
+Button/colors/font_focus_color = Color(0.737028, 0.0124641, 0.737622, 1)
+Button/colors/font_pressed_color = Color(0.496667, 0.0025002, 0.496715, 1)
+Button/font_sizes/font_size = 16
+Button/styles/focus = SubResource("StyleBoxEmpty_o54fn")
+Button/styles/pressed = SubResource("StyleBoxEmpty_qew4h")
+VBoxContainer/constants/separation = -10
