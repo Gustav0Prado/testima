@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://dio6bbyyqw0oa"]
+[gd_scene load_steps=5 format=3 uid="uid://dio6bbyyqw0oa"]
 
 [ext_resource type="PackedScene" uid="uid://bgdpiqserfoe2" path="res://scenes/window_default.tscn" id="1_dn72j"]
 [ext_resource type="Script" uid="uid://erbwokh55aws" path="res://scripts/battle.gd" id="1_th188"]
+[ext_resource type="PackedScene" uid="uid://l0728me87hbv" path="res://scenes/enemy_button.tscn" id="2_a12nh"]
 [ext_resource type="Script" uid="uid://deyp1pxmh7o0h" path="res://scripts/menu.gd" id="3_p1qf1"]
 
 [node name="Battle" type="Control"]
@@ -24,6 +25,32 @@ grow_vertical = 2
 color = Color(0, 0, 0, 1)
 metadata/_edit_lock_ = true
 
+[node name="EnemiesMenu" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+script = ExtResource("3_p1qf1")
+
+[node name="EnemyButton" parent="EnemiesMenu" instance=ExtResource("2_a12nh")]
+layout_mode = 2
+
+[node name="EnemyButton2" parent="EnemiesMenu" instance=ExtResource("2_a12nh")]
+layout_mode = 2
+
+[node name="EnemyButton3" parent="EnemiesMenu" instance=ExtResource("2_a12nh")]
+layout_mode = 2
+
+[node name="EnemyButton4" parent="EnemiesMenu" instance=ExtResource("2_a12nh")]
+layout_mode = 2
+
+[node name="EnemyButton5" parent="EnemiesMenu" instance=ExtResource("2_a12nh")]
+layout_mode = 2
+
 [node name="Menu" type="HBoxContainer" parent="."]
 layout_mode = 0
 offset_left = 4.0
@@ -31,11 +58,11 @@ offset_top = 135.0
 offset_right = 315.0
 offset_bottom = 175.0
 
-[node name="Enemies" parent="Menu" instance=ExtResource("1_dn72j")]
+[node name="EnemyInfo" parent="Menu" instance=ExtResource("1_dn72j")]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Menu/Enemies"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Menu/EnemyInfo"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.039604
@@ -45,14 +72,14 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Menu/Enemies/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Menu/EnemyInfo/VBoxContainer"]
 layout_mode = 2
 
-[node name="EnemyNames" type="Label" parent="Menu/Enemies/VBoxContainer/HBoxContainer"]
+[node name="EnemyNames" type="Label" parent="Menu/EnemyInfo/VBoxContainer/HBoxContainer"]
 layout_mode = 2
-text = "Evil enemies >:("
+text = "Blobby"
 
-[node name="EnemyNumber" type="Label" parent="Menu/Enemies/VBoxContainer/HBoxContainer"]
+[node name="EnemyNumber" type="Label" parent="Menu/EnemyInfo/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
 text = "5"
@@ -195,5 +222,6 @@ text = "00"
 layout_mode = 2
 text = "00"
 
+[connection signal="button_pressed" from="EnemiesMenu" to="." method="_on_enemies_menu_button_pressed"]
 [connection signal="button_focused" from="Menu/Options/Menu" to="." method="_on_menu_button_focused"]
 [connection signal="button_pressed" from="Menu/Options/Menu" to="." method="_on_menu_button_pressed"]
