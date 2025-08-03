@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://l0728me87hbv"]
+[gd_scene load_steps=7 format=3 uid="uid://l0728me87hbv"]
 
 [ext_resource type="Texture2D" uid="uid://x2muhxw0sij2" path="res://assets/battle/enemies/blobby.png" id="1_0ajkp"]
 [ext_resource type="Script" uid="uid://6l7fogejgcvr" path="res://scripts/enemy_button.gd" id="2_0neql"]
@@ -34,9 +34,25 @@ tracks/0/keys = {
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0.52549)]
 }
 
+[sub_resource type="Animation" id="Animation_xcrkv"]
+resource_name = "exit"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 0.5),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_xcrkv"]
 _data = {
 &"RESET": SubResource("Animation_l0du3"),
+&"exit": SubResource("Animation_xcrkv"),
 &"highlight": SubResource("Animation_0neql")
 }
 
