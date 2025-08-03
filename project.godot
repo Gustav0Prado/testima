@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="untitled_rpg_game"
+config/name="Testima"
 run/main_scene="uid://dio6bbyyqw0oa"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
