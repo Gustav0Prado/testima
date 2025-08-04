@@ -3,7 +3,7 @@ class_name BattleActor extends Resource
 signal hp_changed(hp, value_change)
 
 var name : String = ""
-var hp_max: int = 10
+var hp_max: int = 1
 var hp: int = hp_max
 var texture: Texture = null
 

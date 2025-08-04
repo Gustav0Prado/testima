@@ -27,6 +27,7 @@ func _ready() -> void:
 		button.focus_entered.connect(_on_Button_focused.bind(button))
 		button.focus_exited.connect(_on_Button_focus_exited.bind(button))
 		button.pressed.connect(_on_Button_pressed.bind(button))
+		button.tree_exiting.connect(_on_Button_tree_exited.bind(button))
 		
 	if focus_on_start:
 		focus_button()
@@ -46,10 +47,9 @@ func connect_buttons_to_object(target: Object, _name: String = name) -> void:
 
 func focus_button(n: int = index) -> void:
 	if disable_focus_on_exit:
-		for b in _buttons:
-			b.set_focus_mode(FOCUS_ALL)
+		set_buttons_focus_mode(FOCUS_ALL)
 	
-	index = clampi(n, 0, _buttons.size())
+	index = clampi(n, 0, _buttons.size()-1)
 	_buttons[n].grab_focus()
 
 func _on_Button_focused(button: BaseButton) -> void:
@@ -63,3 +63,6 @@ func _on_Button_focus_exited(_button: BaseButton) -> void:
 	await get_tree().process_frame
 	if disable_focus_on_exit and not get_viewport().gui_get_focus_owner() in _buttons:
 		set_buttons_focus_mode(FOCUS_NONE)
+		
+func _on_Button_tree_exited(button: BaseButton) -> void:
+	_buttons.remove_at(button.get_index())
