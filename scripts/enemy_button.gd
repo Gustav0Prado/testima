@@ -8,14 +8,16 @@ var battle_actor: BattleActor = null
 func _ready() -> void:
 	_animation_player.play("RESET")
 	set_process(false)
-	set_battle_actor(Data.enemies.values()[randi() % Data.enemies.size()])
+	
+	var ba : BattleActor = Data.enemies.values()[randi() % Data.enemies.size()]	
+	set_battle_actor(ba)
 
 # Hit effect
 func _process(_delta: float) -> void:
 	self_modulate.a = randf()
 
 func set_battle_actor(_battle_actor: BattleActor) -> void:
-	battle_actor = _battle_actor.duplicate()
+	battle_actor = _battle_actor.duplicate_custom()
 	
 	var callable = Callable()
 	callable = Callable(self, "_on_battle_actor_hp_changed")
@@ -30,6 +32,9 @@ func _on_focus_exited() -> void:
 	_animation_player.play("RESET")
 
 func _on_battle_actor_hp_changed(hp: int, value_changed: int) -> void:
+	if hp == 0:
+		focus_mode = FOCUS_NONE
+	
 	# Taking damage
 	if value_changed < 0:
 		set_process(true)
@@ -37,7 +42,9 @@ func _on_battle_actor_hp_changed(hp: int, value_changed: int) -> void:
 		await _hit.timeout
 		set_process(false)
 		self_modulate.a = 1.0
-	if hp < 0:
+	
+	# Enemy defeated
+	if hp == 0:
 		_animation_player.play("exit")
 		await _animation_player.animation_finished
 		queue_free()

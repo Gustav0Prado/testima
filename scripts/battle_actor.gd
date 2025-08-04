@@ -17,3 +17,9 @@ func set_actor_name(_name: String) -> void:
 func heal_hurt(value: int) -> void:
 	hp = clampi(hp+value, 0, hp_max)
 	emit_signal("hp_changed", hp, value)
+
+func duplicate_custom() -> Resource:
+	var dup : BattleActor = self.duplicate()
+	dup.name = name
+	dup.texture = texture
+	return dup
