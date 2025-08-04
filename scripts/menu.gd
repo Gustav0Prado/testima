@@ -33,10 +33,6 @@ func _ready() -> void:
 	elif disable_focus_on_exit:
 		set_buttons_focus_mode(FOCUS_NONE)
 
-func set_can_focus(mode: int) -> void:
-	for button in _buttons:
-		button.focus_mode = mode
-
 func set_buttons_focus_mode(mode: int) -> void:
 	for button in _buttons:
 		button.focus_mode = mode
@@ -58,7 +54,7 @@ func focus_button(n: int = index) -> void:
 
 func _on_Button_focused(button: BaseButton) -> void:
 	emit_signal("button_focused", button)
-	index = get_index()
+	index = button.get_index()
 	
 func _on_Button_pressed(button: BaseButton) -> void:
 	emit_signal("button_pressed", button)
