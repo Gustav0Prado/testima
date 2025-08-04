@@ -9,7 +9,7 @@ func _ready() -> void:
 	_animation_player.play("RESET")
 	set_process(false)
 	
-	var ba : BattleActor = Data.enemies.values()[randi() % Data.enemies.size()]	
+	var ba : BattleActor = Util.choose(Data.enemies.values())
 	set_battle_actor(ba)
 
 # Hit effect

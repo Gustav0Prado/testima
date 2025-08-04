@@ -50,7 +50,7 @@ func focus_button(n: int = index) -> void:
 		set_buttons_focus_mode(FOCUS_ALL)
 	
 	index = clampi(n, 0, _buttons.size()-1)
-	_buttons[n].grab_focus()
+	_buttons[index].grab_focus()
 
 func _on_Button_focused(button: BaseButton) -> void:
 	emit_signal("button_focused", button)
