@@ -14,8 +14,10 @@ const TWEEN_DURATION: float = 0.5
 @onready var _bottom_start_y: float = _bottom.global_position.y
 @onready var _bottom_exit_y: float = DisplayServer.window_get_size()[1] + 64.0
 @onready var _dialogue_box: DialogueBox = $DialogueBox
+@onready var _screen_shake: ScreenShake = $ShakeCamera2D
 
 @export var auto_advance_text: bool = false
+@export var call_defend_immediately: bool = false
 
 var event_queue: Array = []
 var current_player_index: int = 0
@@ -33,6 +35,11 @@ func _ready() -> void:
 	_enemies_menu.connect_buttons_to_object(self, "enemy_button")
 	_options_menu.connect_buttons_to_object(self, "options_button")
 	
+	# Connects player hp_changhed to camera shake
+	var callable = Callable()
+	callable = Callable(self, "_on_player_hp_changed")
+	Data.player.connect("hp_changed", callable)
+	
 	# Starts on options menu first option 
 	_options_menu.focus_button()
 
@@ -43,13 +50,31 @@ func animate_box(obj: Object, exit: bool, offset: float):
 	tween.tween_property(obj, "global_position:y", final_y+offset, TWEEN_DURATION).set_trans(Tween.TRANS_CIRC)
 	await tween.finished
 
+func sort_events_by_speed(a, b) -> bool:
+	var actor1: BattleActor = a[0]
+	var actor2: BattleActor = b[0]
+	return actor1.speed_roll() > actor2.speed_roll()
+	
+func sort_defends_to_top(a, b) -> bool:
+	if a[1] == DEFEND:
+		if b[1] == DEFEND:
+			return sort_events_by_speed(a, b)
+		else:
+			return true
+	return false
+	
+func sort_events() -> void:
+	event_queue.sort_custom(sort_events_by_speed)
+	if !call_defend_immediately:
+		event_queue.sort_custom(sort_defends_to_top)
+
 func _on_menu_button_focused(_button: BaseButton) -> void:
 	pass
 
 func add_event(actor: BattleActor, type: int, target: Object) -> void:
 	event_queue.append([actor, type, target])
 
-func run_event(actor: BattleActor, type: int, target: Object) -> void:
+func run_event(actor: BattleActor, type: int, target: Object) -> void:	
 	var text: Array = []
 	var damage: int = -1
 	
@@ -77,7 +102,9 @@ func run_event(actor: BattleActor, type: int, target: Object) -> void:
 
 func run_through_event_queue() -> void:
 	for event in event_queue:
-		await run_event(event[0], event[1], event[2])
+		var actor: BattleActor = event[0]
+		if actor.hp > 0:
+			await run_event(event[0], event[1], event[2])
 	
 	# Create animation of menus going up/down
 	animate_box(_dialogue_box, true, 0)
@@ -114,6 +141,9 @@ func _on_enemies_menu_button_pressed(enemy_button: Enemy_Button) -> void:
 		for enemy_btn in _enemies_menu._buttons:
 			add_event(enemy_btn.battle_actor, Util.choose([ATTACK, DEFEND]), Util.choose(party))
 		
+		# Sort by speed with slight randomness
+		sort_events()
+		
 		# Create animation of menus going down
 		animate_box(_bottom, true, 0)
 		
@@ -124,3 +154,7 @@ func _on_enemies_menu_button_pressed(enemy_button: Enemy_Button) -> void:
 		_dialogue_box.global_position.y = _bottom_exit_y
 		animate_box(_dialogue_box, false, -16)
 		_dialogue_box.show()
+
+func _on_player_hp_changed(_hp: int, value_changed: int) -> void:
+	if value_changed < 0:
+		_screen_shake.shake()
