@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dio6bbyyqw0oa"]
+[gd_scene load_steps=8 format=3 uid="uid://dio6bbyyqw0oa"]
 
 [ext_resource type="PackedScene" uid="uid://bgdpiqserfoe2" path="res://scenes/window_default.tscn" id="1_dn72j"]
 [ext_resource type="Script" uid="uid://erbwokh55aws" path="res://scripts/battle.gd" id="1_th188"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://deyp1pxmh7o0h" path="res://scripts/menu.gd" id="3_p1qf1"]
 [ext_resource type="PackedScene" uid="uid://c8w2dnx1857qy" path="res://scenes/dialogue_box.tscn" id="5_lpir7"]
 [ext_resource type="PackedScene" uid="uid://bm8ys4imvne7" path="res://scenes/shake_camera_2d.tscn" id="6_6vh42"]
+[ext_resource type="PackedScene" uid="uid://dgfehc6xkh3lm" path="res://scenes/screen_flash.tscn" id="7_4k1nj"]
 
 [node name="Battle" type="Control"]
 layout_mode = 3
@@ -241,6 +242,9 @@ grow_vertical = 0
 handleInput = false
 
 [node name="ShakeCamera2D" parent="." instance=ExtResource("6_6vh42")]
+
+[node name="ScreenFlash" parent="." instance=ExtResource("7_4k1nj")]
+layout_mode = 0
 
 [connection signal="button_pressed" from="EnemiesMenu" to="." method="_on_enemies_menu_button_pressed"]
 [connection signal="button_focused" from="Menu/Options/Menu" to="." method="_on_menu_button_focused"]

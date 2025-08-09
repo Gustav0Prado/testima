@@ -1,2 +1,4 @@
 TODO
--
+- fix bad comparison function: sorting will be broken
+- do enemy count check at the end of event queue to decide if victory
+- also do player hp checks i.e. 

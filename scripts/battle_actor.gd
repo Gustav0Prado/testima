@@ -33,5 +33,5 @@ func duplicate_custom() -> Resource:
 	return dup
 
 func speed_roll() -> int:
-	var spread: int = 3
+	var spread: int = 4
 	return speed + randi_range(-spread, spread)

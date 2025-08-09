@@ -5,6 +5,12 @@ enum {
 	DEFEND,
 } 
 
+enum {
+	ACTOR,
+	ACTION_TYPE,
+	TARGET
+}
+
 const DEFAULT_WAIT_TIME: float = 1.0
 const TWEEN_DURATION: float = 0.5
 
@@ -51,13 +57,13 @@ func animate_box(obj: Object, exit: bool, offset: float):
 	await tween.finished
 
 func sort_events_by_speed(a, b) -> bool:
-	var actor1: BattleActor = a[0]
-	var actor2: BattleActor = b[0]
+	var actor1: BattleActor = a[ACTOR]
+	var actor2: BattleActor = b[ACTOR]
 	return actor1.speed_roll() > actor2.speed_roll()
 	
 func sort_defends_to_top(a, b) -> bool:
-	if a[1] == DEFEND:
-		if b[1] == DEFEND:
+	if a[ACTION_TYPE] == DEFEND:
+		if b[ACTION_TYPE] == DEFEND:
 			return sort_events_by_speed(a, b)
 		else:
 			return true
@@ -102,9 +108,9 @@ func run_event(actor: BattleActor, type: int, target: Object) -> void:
 
 func run_through_event_queue() -> void:
 	for event in event_queue:
-		var actor: BattleActor = event[0]
+		var actor: BattleActor = event[ACTOR]
 		if actor.hp > 0:
-			await run_event(event[0], event[1], event[2])
+			await run_event(event[ACTOR], event[ACTION_TYPE], event[TARGET])
 	
 	# Create animation of menus going up/down
 	animate_box(_dialogue_box, true, 0)
@@ -139,7 +145,7 @@ func _on_enemies_menu_button_pressed(enemy_button: Enemy_Button) -> void:
 		
 		# Each enemy does an action
 		for enemy_btn in _enemies_menu._buttons:
-			add_event(enemy_btn.battle_actor, Util.choose([ATTACK, DEFEND]), Util.choose(party))
+			add_event(enemy_btn.battle_actor, Util.choose_weighted([ATTACK, 5, DEFEND, 2]), Util.choose(party))
 		
 		# Sort by speed with slight randomness
 		sort_events()
@@ -158,3 +164,4 @@ func _on_enemies_menu_button_pressed(enemy_button: Enemy_Button) -> void:
 func _on_player_hp_changed(_hp: int, value_changed: int) -> void:
 	if value_changed < 0:
 		_screen_shake.shake()
+		Util.screen_flash(self, "player_is_hit")
