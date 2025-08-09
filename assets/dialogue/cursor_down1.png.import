@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://x2muhxw0sij2"
-path="res://.godot/imported/Blobby.png-93d690f665b74b7c9f76657b933063ec.ctex"
+uid="uid://bdxhaqqcmvt8x"
+path="res://.godot/imported/cursor_down1.png-81f25648129c94533012d06ee18e98be.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/battle/enemies/Blobby.png"
-dest_files=["res://.godot/imported/Blobby.png-93d690f665b74b7c9f76657b933063ec.ctex"]
+source_file="res://assets/dialogue/cursor_down1.png"
+dest_files=["res://.godot/imported/cursor_down1.png-81f25648129c94533012d06ee18e98be.ctex"]
 
 [params]
 

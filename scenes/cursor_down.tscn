@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://bkxpeclx8kax4"]
+
+[ext_resource type="Texture2D" uid="uid://bg53yd2li86yj" path="res://assets/dialogue/cursor_down.tres" id="1_csygn"]
+
+[node name="CursorDown" type="TextureRect"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CursorDown" type="Sprite2D" parent="."]
+position = Vector2(8, 8)
+texture = ExtResource("1_csygn")

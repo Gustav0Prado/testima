@@ -5,10 +5,17 @@ enum {
 	DEFEND,
 } 
 
-const DEFAULT_WAIT_TIME: float = 0.5
+const DEFAULT_WAIT_TIME: float = 1.0
+const TWEEN_DURATION: float = 0.5
 
 @onready var _enemies_menu: Menu = $EnemiesMenu
 @onready var _options_menu: Menu = $Menu/Options/Menu
+@onready var _bottom: HBoxContainer = $Menu
+@onready var _bottom_start_y: float = _bottom.global_position.y
+@onready var _bottom_exit_y: float = DisplayServer.window_get_size()[1] + 64.0
+@onready var _dialogue_box: DialogueBox = $DialogueBox
+
+@export var auto_advance_text: bool = false
 
 var event_queue: Array = []
 var current_player_index: int = 0
@@ -19,6 +26,9 @@ func _ready() -> void:
 	# Removes mouse input from the game
 	#Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
+	_dialogue_box.handleInput = !auto_advance_text
+	_dialogue_box.hide()
+	
 	# Connects buttons to this object
 	_enemies_menu.connect_buttons_to_object(self, "enemy_button")
 	_options_menu.connect_buttons_to_object(self, "options_button")
@@ -26,31 +36,55 @@ func _ready() -> void:
 	# Starts on options menu first option 
 	_options_menu.focus_button()
 
-#func _on_menu_button_focused(button: BaseButton) -> void:
-	#print(button.text)
+func animate_box(obj: Object, exit: bool, offset: float):
+	var tween = create_tween()
+	
+	var final_y : float = _bottom_exit_y if exit else _bottom_start_y
+	tween.tween_property(obj, "global_position:y", final_y+offset, TWEEN_DURATION).set_trans(Tween.TRANS_CIRC)
+	await tween.finished
 
-#func wait(time: int) -> void:
-	#await get_tree().create_timer(time).timeout
+func _on_menu_button_focused(_button: BaseButton) -> void:
+	pass
 
 func add_event(actor: BattleActor, type: int, target: Object) -> void:
 	event_queue.append([actor, type, target])
 
 func run_event(actor: BattleActor, type: int, target: Object) -> void:
+	var text: Array = []
+	var damage: int = -1
+	
 	match type:
 		ATTACK:
-			print(actor.name + " wacks " + target.name)
-			target.heal_hurt(-1)
-			await get_tree().create_timer(DEFAULT_WAIT_TIME).timeout
+			target.heal_hurt(damage)
+			text = [
+				actor.name + " wacks " + target.name + "!!",
+				target.name + " takes " + str(abs(damage)) + " damage!!",
+			]
+			if target.hp <= 0:
+				text.append(target.name + " is defeated!!")
 		DEFEND:
-			print(actor.name + " defends!")
-			await await get_tree().create_timer(DEFAULT_WAIT_TIME).timeout
+			text = [actor.name + " defends!!"]
 		_:
 			pass
+
+	_dialogue_box.add_text(text)
+	if auto_advance_text:
+		for _i in range(text.size()):
+			await get_tree().create_timer(DEFAULT_WAIT_TIME).timeout
+			_dialogue_box.advance()
+	else:
+		await _dialogue_box.closed
 
 func run_through_event_queue() -> void:
 	for event in event_queue:
 		await run_event(event[0], event[1], event[2])
-		
+	
+	# Create animation of menus going up/down
+	animate_box(_dialogue_box, true, 0)
+	_dialogue_box.hide()
+	animate_box(_bottom, false, 0)
+	
+	# Clears queue and focus on options menu
 	event_queue.clear()
 	_options_menu.focus_button()
 
@@ -65,13 +99,28 @@ func _on_menu_button_pressed(button: BaseButton) -> void:
 func _on_enemies_menu_button_pressed(enemy_button: Enemy_Button) -> void:
 	add_event(Data.player, current_action, enemy_button.battle_actor)
 	
+	# If not last player, goes to next
 	current_player_index += 1
 	if current_player_index < party.size():
 		_options_menu.focus_button()
 	else:
 		var focus_owner: Control = get_viewport().gui_get_focus_owner()
 		focus_owner.release_focus()
+		
+		# Return to first party member
 		current_player_index = 0
+		
+		# Each enemy does an action
 		for enemy_btn in _enemies_menu._buttons:
 			add_event(enemy_btn.battle_actor, Util.choose([ATTACK, DEFEND]), Util.choose(party))
+		
+		# Create animation of menus going down
+		animate_box(_bottom, true, 0)
+		
+		# Runs all events in queue
 		run_through_event_queue()
+		
+		# Animate dialogue box
+		_dialogue_box.global_position.y = _bottom_exit_y
+		animate_box(_dialogue_box, false, -16)
+		_dialogue_box.show()

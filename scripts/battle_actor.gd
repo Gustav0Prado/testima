@@ -11,10 +11,14 @@ func _init(_hp: int = hp_max) -> void:
 	hp = _hp
 
 func set_actor_name(_name: String) -> void:
-	name = _name.to_lower()
+	#name = _name.to_lower()
+	name = _name
 	texture = load("res://assets/battle/enemies/" + name + ".png")
 
 func heal_hurt(value: int) -> void:
+	if value == 0:
+		return
+	
 	hp = clampi(hp+value, 0, hp_max)
 	emit_signal("hp_changed", hp, value)
 

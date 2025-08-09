@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://l0728me87hbv"]
 
-[ext_resource type="Texture2D" uid="uid://x2muhxw0sij2" path="res://assets/battle/enemies/blobby.png" id="1_0ajkp"]
+[ext_resource type="Texture2D" uid="uid://x2muhxw0sij2" path="res://assets/battle/enemies/Blobby.png" id="1_0ajkp"]
 [ext_resource type="Script" uid="uid://6l7fogejgcvr" path="res://scripts/enemy_button.gd" id="2_0neql"]
 
 [sub_resource type="Animation" id="Animation_l0du3"]
