@@ -47,7 +47,6 @@ func _ready() -> void:
 	# Connects player hp_changhed to camera shake
 	Data.player.hp_changed.connect(_on_player_hp_changed)
 	
-	await get_tree().process_frame
 	# Connects enemies exit to battle (XP and Gold gain)
 	for enemy_button: Enemy_Button in _enemies_menu.get_buttons():
 		enemy_button.tree_exiting.connect(
