@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://b0i1k6uamgugs"]
+
+[node name="EnemyHBoxInfo" type="HBoxContainer"]
+
+[node name="EnemyNames" type="Label" parent="."]
+layout_mode = 2
+text = "Blobby"
+
+[node name="EnemyNumber" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "5"

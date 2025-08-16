@@ -21,6 +21,7 @@ const TWEEN_DURATION: float = 0.5
 @onready var _bottom_exit_y: float = DisplayServer.window_get_size()[1] + 64.0
 @onready var _dialogue_box: DialogueBox = $DialogueBox
 @onready var _screen_shake: ScreenShake = $ShakeCamera2D
+@onready var _enemy_info: EnemyInfo = $Menu/EnemyInfo
 
 @export var auto_advance_text: bool = false
 @export var call_defend_immediately: bool = false
@@ -49,12 +50,22 @@ func _ready() -> void:
 	
 	# Connects enemies exit to battle (XP and Gold gain)
 	for enemy_button: Enemy_Button in _enemies_menu.get_buttons():
-		enemy_button.tree_exiting.connect(
-			func(): _on_enemy_button_tree_exiting(enemy_button.battle_actor)
-		)
+		var enemy: BattleActor = Util.choose_weighted([Util.choose(Data.enemies.values()), 3, null, 1])
+		enemy_button.set_battle_actor(enemy)
+		if enemy:
+			_enemy_info.add_enemy(enemy)
+		else:
+			enemy_button.defeated.connect(
+				func(): _on_enemy_button_defeated(enemy_button.battle_actor)
+			)
 	
 	# Starts on options menu first option 
 	_options_menu.focus_button()
+
+func debug_reload():
+	_dialogue_box.add_text(["Resetting in 3 seconds..."])
+	await get_tree().create_timer(3).timeout
+	get_tree().reload_current_scene()
 
 func animate_box(obj: Object, exit: bool, offset: float):
 	var tween = create_tween()
@@ -89,7 +100,7 @@ func add_event(actor: BattleActor, type: int, target: Object) -> void:
 
 func run_event(actor: BattleActor, type: int, target: Object) -> void:	
 	var text: Array = []
-	var damage: int = -1
+	var damage: int = actor.damage_roll()
 	
 	match type:
 		ATTACK:
@@ -119,6 +130,8 @@ func run_through_event_queue() -> void:
 		if actor.hp > 0:
 			await run_event(event[ACTOR], event[ACTION_TYPE], event[TARGET])
 	
+	# TODO need to refactor for when we add party members instead of only one player character
+	Data.player.is_defending = false
 	# Check if defeat or victory after queue
 	var defeat: bool = Data.player.hp <= 0
 	if defeat:
@@ -126,13 +139,12 @@ func run_through_event_queue() -> void:
 			Data.player.name + " loses the will to continue :("
 		])
 		await _dialogue_box.closed
-		_dialogue_box.add_text(["Resetting in 3 seconds..."])
-		await get_tree().create_timer(3).timeout
-		get_tree().reload_current_scene()
+		debug_reload()
 		return
 	
 	var victory: bool = true
 	for enemy_button: Enemy_Button in _enemies_menu.get_buttons():
+		enemy_button.battle_actor.is_defending = false
 		if enemy_button.battle_actor.hp > 0:
 			victory = false
 			break
@@ -144,19 +156,17 @@ func run_through_event_queue() -> void:
 			# TODO item drops here
 		])
 		await _dialogue_box.closed
-		_dialogue_box.add_text(["Resetting in 3 seconds..."])
-		await get_tree().create_timer(3).timeout
-		get_tree().reload_current_scene()
+		debug_reload()
 		return
 	else:
-		# Create animation of menus going up/down
-		animate_box(_dialogue_box, true, 0)
-		_dialogue_box.hide()
-		animate_box(_bottom, false, 0)
-		
 		# Clears queue and focus on options menu
 		event_queue.clear()
 		_options_menu.focus_button()
+		
+		# Create animation of menus going up/down
+		animate_box(_dialogue_box, true, 0)
+		_dialogue_box.hide()
+		animate_box(_bottom, false, 0)		
 
 func _on_menu_button_pressed(button: BaseButton) -> void:
 	match button.text:
@@ -203,6 +213,6 @@ func _on_player_hp_changed(_hp: int, value_changed: int) -> void:
 		_screen_shake.shake()
 		Util.screen_flash(self, "player_is_hit")
 		
-func _on_enemy_button_tree_exiting(battle_actor: BattleActor) -> void:
+func _on_enemy_button_defeated(battle_actor: BattleActor) -> void:
 	xp_gained += battle_actor.xp
 	gold_gained += battle_actor.gold

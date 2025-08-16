@@ -1,5 +1,7 @@
 class_name Enemy_Button extends TextureButton
 
+signal defeated
+
 const HIT_TEXT: PackedScene = preload("res://scenes/hit_text.tscn")
 
 @onready var _hit: Timer = $Hit
@@ -11,7 +13,7 @@ func _ready() -> void:
 	if !visible:
 		queue_free()
 	
-	_animation_player.play("idle")
+	_animation_player.play("RESET")
 	set_process(false)
 	
 	set_battle_actor(Util.choose(Data.enemies.values()))
@@ -21,19 +23,22 @@ func _process(_delta: float) -> void:
 	self_modulate.a = randf()
 
 func set_battle_actor(_battle_actor: BattleActor) -> void:
-	battle_actor = _battle_actor.duplicate_custom()
-	
-	var callable = Callable()
-	callable = Callable(self, "_on_battle_actor_hp_changed")
-	battle_actor.connect("hp_changed", callable)
-	
-	texture_normal = battle_actor.texture
+	if _battle_actor:
+		battle_actor = _battle_actor.duplicate_custom()
+		
+		var callable = Callable()
+		callable = Callable(self, "_on_battle_actor_hp_changed")
+		battle_actor.connect("hp_changed", callable)
+		
+		texture_normal = battle_actor.texture
+	else:
+		queue_free()
 
 func _on_focus_entered() -> void:
 	_animation_player.play("highlight")
 
 func _on_focus_exited() -> void:
-	_animation_player.play("idle")
+	_animation_player.play("RESET")
 
 func _on_battle_actor_hp_changed(hp: int, value_changed: int) -> void:
 	# On HP change
@@ -52,6 +57,7 @@ func _on_battle_actor_hp_changed(hp: int, value_changed: int) -> void:
 	# Enemy defeated
 	if hp == 0:
 		focus_mode = FOCUS_NONE
+		emit_signal("defeated")
 		_animation_player.play("exit")
 		await _animation_player.animation_finished
 		queue_free()

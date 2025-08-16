@@ -30,3 +30,6 @@ func choose_weighted(choices: Array):
 		if n < 0:
 			return choices[i - 1]
 	return choices[0]
+
+func add_with_random_spread(value: int, spread: int) -> int:
+	return value + randi_range(-spread, spread)

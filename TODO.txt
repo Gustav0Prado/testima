@@ -1,10 +1,12 @@
 TODO
 [] fix bad comparison function: sorting will be broken
-[] do enemy count check at the end of event queue to decide if victory
-[] also do player hp checks i.e. 
-[] Defending
+[-] do enemy count check at the end of event queue to decide if victory
+[-] also do player hp checks i.e. 
+[-] Defending
+[] Print player and enemy data on GUI
 [] Running away
 [] Items and inventory
 [] Item usage
-[] XP and gold dropd from enemies
+[-] XP and gold droped from enemies
 	[-] Add these vars to battle_actor
+[] Party

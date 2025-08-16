@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://dio6bbyyqw0oa"]
+[gd_scene load_steps=9 format=3 uid="uid://dio6bbyyqw0oa"]
 
-[ext_resource type="PackedScene" uid="uid://bgdpiqserfoe2" path="res://scenes/window_default.tscn" id="1_dn72j"]
 [ext_resource type="Script" uid="uid://erbwokh55aws" path="res://scripts/battle.gd" id="1_th188"]
 [ext_resource type="PackedScene" uid="uid://l0728me87hbv" path="res://scenes/enemy_button.tscn" id="2_a12nh"]
 [ext_resource type="Script" uid="uid://deyp1pxmh7o0h" path="res://scripts/menu.gd" id="3_p1qf1"]
+[ext_resource type="Texture2D" uid="uid://de3q5fjuwurna" path="res://assets/battle/ninepatch.png" id="4_4k1nj"]
+[ext_resource type="PackedScene" uid="uid://c78o1qvvc1rg7" path="res://scenes/enemy_info.tscn" id="4_f4pi3"]
 [ext_resource type="PackedScene" uid="uid://c8w2dnx1857qy" path="res://scenes/dialogue_box.tscn" id="5_lpir7"]
 [ext_resource type="PackedScene" uid="uid://bm8ys4imvne7" path="res://scenes/shake_camera_2d.tscn" id="6_6vh42"]
 [ext_resource type="PackedScene" uid="uid://dgfehc6xkh3lm" path="res://scenes/screen_flash.tscn" id="7_4k1nj"]
@@ -61,35 +62,17 @@ offset_top = 135.0
 offset_right = 315.0
 offset_bottom = 175.0
 
-[node name="EnemyInfo" parent="Menu" instance=ExtResource("1_dn72j")]
-custom_minimum_size = Vector2(36, 36)
+[node name="EnemyInfo" parent="Menu" instance=ExtResource("4_f4pi3")]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Menu/EnemyInfo"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.039604
-anchor_right = 0.960396
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-metadata/_edit_use_anchors_ = true
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Menu/EnemyInfo/VBoxContainer"]
+[node name="Options" type="NinePatchRect" parent="Menu"]
+custom_minimum_size = Vector2(100, 36)
 layout_mode = 2
-
-[node name="EnemyNames" type="Label" parent="Menu/EnemyInfo/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-text = "Blobby"
-
-[node name="EnemyNumber" type="Label" parent="Menu/EnemyInfo/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 10
-text = "5"
-
-[node name="Options" parent="Menu" instance=ExtResource("1_dn72j")]
-custom_minimum_size = Vector2(36, 36)
-layout_mode = 2
+texture = ExtResource("4_4k1nj")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
 
 [node name="Menu" type="HBoxContainer" parent="Menu/Options"]
 layout_mode = 1
@@ -130,11 +113,16 @@ layout_mode = 2
 text = "Run"
 flat = true
 
-[node name="Top" parent="Menu" instance=ExtResource("1_dn72j")]
-custom_minimum_size = Vector2(36, 36)
+[node name="PlayerInfo" type="NinePatchRect" parent="Menu"]
+custom_minimum_size = Vector2(105, 0)
 layout_mode = 2
+texture = ExtResource("4_4k1nj")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Menu/Top"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Menu/PlayerInfo"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -146,87 +134,88 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 10
 
-[node name="Names" type="VBoxContainer" parent="Menu/Top/HBoxContainer"]
+[node name="Names" type="VBoxContainer" parent="Menu/PlayerInfo/HBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = -4
 
-[node name="P1" type="Label" parent="Menu/Top/HBoxContainer/Names"]
+[node name="P1" type="Label" parent="Menu/PlayerInfo/HBoxContainer/Names"]
 layout_mode = 2
 text = "Playername"
 
-[node name="P2" type="Label" parent="Menu/Top/HBoxContainer/Names"]
+[node name="P2" type="Label" parent="Menu/PlayerInfo/HBoxContainer/Names"]
 layout_mode = 2
 text = "Playername"
 
-[node name="P3" type="Label" parent="Menu/Top/HBoxContainer/Names"]
+[node name="P3" type="Label" parent="Menu/PlayerInfo/HBoxContainer/Names"]
 layout_mode = 2
 text = "Playername"
 
-[node name="P4" type="Label" parent="Menu/Top/HBoxContainer/Names"]
+[node name="P4" type="Label" parent="Menu/PlayerInfo/HBoxContainer/Names"]
 layout_mode = 2
 text = "Playername"
 
-[node name="LVLs" type="VBoxContainer" parent="Menu/Top/HBoxContainer"]
+[node name="LVLs" type="VBoxContainer" parent="Menu/PlayerInfo/HBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = -4
 
-[node name="P1" type="Label" parent="Menu/Top/HBoxContainer/LVLs"]
+[node name="P1" type="Label" parent="Menu/PlayerInfo/HBoxContainer/LVLs"]
 layout_mode = 2
 text = "00"
 
-[node name="P2" type="Label" parent="Menu/Top/HBoxContainer/LVLs"]
+[node name="P2" type="Label" parent="Menu/PlayerInfo/HBoxContainer/LVLs"]
 layout_mode = 2
 text = "00"
 
-[node name="P3" type="Label" parent="Menu/Top/HBoxContainer/LVLs"]
+[node name="P3" type="Label" parent="Menu/PlayerInfo/HBoxContainer/LVLs"]
 layout_mode = 2
 text = "00"
 
-[node name="P4" type="Label" parent="Menu/Top/HBoxContainer/LVLs"]
+[node name="P4" type="Label" parent="Menu/PlayerInfo/HBoxContainer/LVLs"]
 layout_mode = 2
 text = "00"
 
-[node name="HPs" type="VBoxContainer" parent="Menu/Top/HBoxContainer"]
+[node name="HPs" type="VBoxContainer" parent="Menu/PlayerInfo/HBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = -4
 
-[node name="P1" type="Label" parent="Menu/Top/HBoxContainer/HPs"]
+[node name="P1" type="Label" parent="Menu/PlayerInfo/HBoxContainer/HPs"]
 layout_mode = 2
 text = "00"
 
-[node name="P2" type="Label" parent="Menu/Top/HBoxContainer/HPs"]
+[node name="P2" type="Label" parent="Menu/PlayerInfo/HBoxContainer/HPs"]
 layout_mode = 2
 text = "00"
 
-[node name="P3" type="Label" parent="Menu/Top/HBoxContainer/HPs"]
+[node name="P3" type="Label" parent="Menu/PlayerInfo/HBoxContainer/HPs"]
 layout_mode = 2
 text = "00"
 
-[node name="P4" type="Label" parent="Menu/Top/HBoxContainer/HPs"]
+[node name="P4" type="Label" parent="Menu/PlayerInfo/HBoxContainer/HPs"]
 layout_mode = 2
 text = "00"
 
-[node name="MPs" type="VBoxContainer" parent="Menu/Top/HBoxContainer"]
+[node name="MPs" type="VBoxContainer" parent="Menu/PlayerInfo/HBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = -4
 
-[node name="P1" type="Label" parent="Menu/Top/HBoxContainer/MPs"]
+[node name="P1" type="Label" parent="Menu/PlayerInfo/HBoxContainer/MPs"]
 layout_mode = 2
 text = "00"
 
-[node name="P2" type="Label" parent="Menu/Top/HBoxContainer/MPs"]
+[node name="P2" type="Label" parent="Menu/PlayerInfo/HBoxContainer/MPs"]
 layout_mode = 2
 text = "00"
 
-[node name="P3" type="Label" parent="Menu/Top/HBoxContainer/MPs"]
+[node name="P3" type="Label" parent="Menu/PlayerInfo/HBoxContainer/MPs"]
 layout_mode = 2
 text = "00"
 
-[node name="P4" type="Label" parent="Menu/Top/HBoxContainer/MPs"]
+[node name="P4" type="Label" parent="Menu/PlayerInfo/HBoxContainer/MPs"]
 layout_mode = 2
 text = "00"
 
 [node name="DialogueBox" parent="." instance=ExtResource("5_lpir7")]
+visible = false
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
