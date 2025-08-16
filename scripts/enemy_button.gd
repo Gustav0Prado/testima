@@ -1,18 +1,20 @@
 class_name Enemy_Button extends TextureButton
 
-var battle_actor: BattleActor = null
-
 const HIT_TEXT: PackedScene = preload("res://scenes/hit_text.tscn")
 
 @onready var _hit: Timer = $Hit
 @onready var _animation_player: AnimationPlayer = $AnimationPlayer
 
+var battle_actor: BattleActor = null
+
 func _ready() -> void:
-	_animation_player.play("RESET")
+	if !visible:
+		queue_free()
+	
+	_animation_player.play("idle")
 	set_process(false)
 	
-	var ba : BattleActor = Util.choose(Data.enemies.values())
-	set_battle_actor(ba)
+	set_battle_actor(Util.choose(Data.enemies.values()))
 
 # Hit effect
 func _process(_delta: float) -> void:
@@ -31,7 +33,7 @@ func _on_focus_entered() -> void:
 	_animation_player.play("highlight")
 
 func _on_focus_exited() -> void:
-	_animation_player.play("RESET")
+	_animation_player.play("idle")
 
 func _on_battle_actor_hp_changed(hp: int, value_changed: int) -> void:
 	# On HP change

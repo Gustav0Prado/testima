@@ -1,7 +1,7 @@
 class_name Menu extends Container
 
 @export var focus_on_start: bool = false
-@export var disable_focus_on_exit = true
+@export var disable_focus_on_exit: bool = true
 
 var index: int = 0
 
@@ -15,9 +15,9 @@ signal button_pressed(button: BaseButton)
 func _ready() -> void:
 	# Get all buttons
 	if _boxes.size() <= 2:
-		for b in _boxes[0].get_children():
+		for b: Object in _boxes[0].get_children():
 			_buttons.append(b)
-		for b in _boxes[1].get_children():
+		for b: Object in _boxes[1].get_children():
 			_buttons.append(b)
 	else:
 		_buttons = _boxes
@@ -51,6 +51,9 @@ func focus_button(n: int = index) -> void:
 	
 	index = clampi(n, 0, _buttons.size()-1)
 	_buttons[index].grab_focus()
+
+func get_buttons() -> Array:
+	return self._buttons
 
 func _on_Button_focused(button: BaseButton) -> void:
 	emit_signal("button_focused", button)

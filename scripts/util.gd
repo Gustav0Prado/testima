@@ -2,7 +2,7 @@ extends Node
 
 const SCREEN_FLASH: PackedScene = preload("res://scenes/screen_flash.tscn")
 
-static func screen_flash(node: Node, animation: String) -> void:
+func screen_flash(node: Node, animation: String) -> void:
 	var inst: ScreenFlash = SCREEN_FLASH.instantiate()
 	if node.owner == null:
 		node.add_child(inst)
@@ -10,12 +10,12 @@ static func screen_flash(node: Node, animation: String) -> void:
 		node.owner.add_child(inst)
 	inst.play(animation)
 
-static func choose(array: Array):
+func choose(array: Array):
 	return array[randi() % array.size()]
 
-static func choose_weighted(choices: Array):
+func choose_weighted(choices: Array):
 	# choices = [variant, chance(int), variant, chance(int)...]
-	var n = 0
+	var n: int = 0
 	var choices_size: int = choices.size()
 	for i in range(1, choices_size, 2):
 		if choices[i] <= 0:

@@ -29,6 +29,9 @@ var event_queue: Array = []
 var current_player_index: int = 0
 var current_action : int = -1
 var party: Array = [Data.player]
+var xp_gained: int = 0
+var gold_gained: int = 0
+
 
 func _ready() -> void:
 	# Removes mouse input from the game
@@ -42,9 +45,14 @@ func _ready() -> void:
 	_options_menu.connect_buttons_to_object(self, "options_button")
 	
 	# Connects player hp_changhed to camera shake
-	var callable = Callable()
-	callable = Callable(self, "_on_player_hp_changed")
-	Data.player.connect("hp_changed", callable)
+	Data.player.hp_changed.connect(_on_player_hp_changed)
+	
+	await get_tree().process_frame
+	# Connects enemies exit to battle (XP and Gold gain)
+	for enemy_button: Enemy_Button in _enemies_menu.get_buttons():
+		enemy_button.tree_exiting.connect(
+			func(): _on_enemy_button_tree_exiting(enemy_button.battle_actor)
+		)
 	
 	# Starts on options menu first option 
 	_options_menu.focus_button()
@@ -112,14 +120,44 @@ func run_through_event_queue() -> void:
 		if actor.hp > 0:
 			await run_event(event[ACTOR], event[ACTION_TYPE], event[TARGET])
 	
-	# Create animation of menus going up/down
-	animate_box(_dialogue_box, true, 0)
-	_dialogue_box.hide()
-	animate_box(_bottom, false, 0)
+	# Check if defeat or victory after queue
+	var defeat: bool = Data.player.hp <= 0
+	if defeat:
+		_dialogue_box.add_text([
+			Data.player.name + " loses the will to continue :("
+		])
+		await _dialogue_box.closed
+		_dialogue_box.add_text(["Resetting in 3 seconds..."])
+		await get_tree().create_timer(3).timeout
+		get_tree().reload_current_scene()
+		return
 	
-	# Clears queue and focus on options menu
-	event_queue.clear()
-	_options_menu.focus_button()
+	var victory: bool = true
+	for enemy_button: Enemy_Button in _enemies_menu.get_buttons():
+		if enemy_button.battle_actor.hp > 0:
+			victory = false
+			break
+	
+	if victory:
+		_dialogue_box.add_text([
+			Data.player.name + " receives " + str(xp_gained) + " XP!",
+			Data.player.name + " receives " + str(gold_gained) + " gold!",
+			# TODO item drops here
+		])
+		await _dialogue_box.closed
+		_dialogue_box.add_text(["Resetting in 3 seconds..."])
+		await get_tree().create_timer(3).timeout
+		get_tree().reload_current_scene()
+		return
+	else:
+		# Create animation of menus going up/down
+		animate_box(_dialogue_box, true, 0)
+		_dialogue_box.hide()
+		animate_box(_bottom, false, 0)
+		
+		# Clears queue and focus on options menu
+		event_queue.clear()
+		_options_menu.focus_button()
 
 func _on_menu_button_pressed(button: BaseButton) -> void:
 	match button.text:
@@ -165,3 +203,7 @@ func _on_player_hp_changed(_hp: int, value_changed: int) -> void:
 	if value_changed < 0:
 		_screen_shake.shake()
 		Util.screen_flash(self, "player_is_hit")
+		
+func _on_enemy_button_tree_exiting(battle_actor: BattleActor) -> void:
+	xp_gained += battle_actor.xp
+	gold_gained += battle_actor.gold

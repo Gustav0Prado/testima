@@ -43,15 +43,19 @@ script = ExtResource("3_p1qf1")
 layout_mode = 2
 
 [node name="EnemyButton2" parent="EnemiesMenu" instance=ExtResource("2_a12nh")]
+visible = false
 layout_mode = 2
 
 [node name="EnemyButton3" parent="EnemiesMenu" instance=ExtResource("2_a12nh")]
+visible = false
 layout_mode = 2
 
 [node name="EnemyButton4" parent="EnemiesMenu" instance=ExtResource("2_a12nh")]
+visible = false
 layout_mode = 2
 
 [node name="EnemyButton5" parent="EnemiesMenu" instance=ExtResource("2_a12nh")]
+visible = false
 layout_mode = 2
 
 [node name="Menu" type="HBoxContainer" parent="."]

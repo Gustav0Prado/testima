@@ -17,13 +17,14 @@ func _input(event: InputEvent) -> void:
 	elif event.is_action_pressed("ui_cancel"):
 		advance()
 	else: return
+	
+	get_viewport().set_input_as_handled()
 
 func clear() -> void:
 	_dialogue.text = ""
 	hide()
 	set_process_input(false)
 	emit_signal("closed")
-	get_viewport().set_input_as_handled()
 	
 func advance() -> void:
 	if !lines:
@@ -39,6 +40,6 @@ func advance() -> void:
 	_dialogue.text += lines.pop_front()
 	
 func add_text(text: Array) -> void:
-	if text:
+	if text and not text.is_empty():
 		lines.append_array(text)
 		advance()

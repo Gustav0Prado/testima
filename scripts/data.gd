@@ -1,10 +1,11 @@
 extends Node
 
 var enemies: Dictionary = {
-	"Blobby" = BattleActor.new(1, 5),
+	# Name | HP | Speed | Level
+	"Blobby" = BattleActor.new(1, 5, 4),
 }
 
-var player : BattleActor = BattleActor.new(32, 2)
+var player : BattleActor = BattleActor.new(32, 2, 1)
 
 func _ready() -> void:
 	# Set keys to enemies
