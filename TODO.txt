@@ -4,6 +4,9 @@ TODO
 [-] also do player hp checks i.e. 
 [-] Defending
 [] Print player and enemy data on GUI
+	[-] Enemies data
+	[-] Player data
+	[] Indicate active player
 [] Running away
 [] Items and inventory
 [] Item usage

@@ -18,6 +18,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_th188")
+auto_advance_text = null
+call_defend_immediately = null
 metadata/_edit_lock_ = true
 
 [node name="Background" type="ColorRect" parent="."]

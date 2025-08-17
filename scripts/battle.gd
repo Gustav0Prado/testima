@@ -29,7 +29,6 @@ const TWEEN_DURATION: float = 0.5
 var event_queue: Array = []
 var current_player_index: int = 0
 var current_action : int = -1
-var party: Array = [Data.player]
 var xp_gained: int = 0
 var gold_gained: int = 0
 
@@ -45,16 +44,16 @@ func _ready() -> void:
 	_enemies_menu.connect_buttons_to_object(self, "enemy_button")
 	_options_menu.connect_buttons_to_object(self, "options_button")
 	
-	# Connects player hp_changhed to camera shake
-	Data.player.hp_changed.connect(_on_player_hp_changed)
+	# Connects player hp_changed to camera shake
+	for player in Data.party:
+		if player: player.hp_changed.connect(_on_player_hp_changed)
 	
 	# Connects enemies exit to battle (XP and Gold gain)
 	for enemy_button: Enemy_Button in _enemies_menu.get_buttons():
 		var enemy: BattleActor = Util.choose_weighted([Util.choose(Data.enemies.values()), 3, null, 1])
 		enemy_button.set_battle_actor(enemy)
 		if enemy:
-			_enemy_info.add_enemy(enemy)
-		else:
+			_enemy_info.add_enemy(enemy, enemy_button)
 			enemy_button.defeated.connect(
 				func(): _on_enemy_button_defeated(enemy_button.battle_actor)
 			)
@@ -101,17 +100,27 @@ func add_event(actor: BattleActor, type: int, target: Object) -> void:
 func run_event(actor: BattleActor, type: int, target: Object) -> void:	
 	var text: Array = []
 	var damage: int = actor.damage_roll()
+	var total_dmg: int = 0
 	
 	match type:
 		ATTACK:
-			target.heal_hurt(damage)
-			text = [
-				actor.name + " wacks " + target.name + "!!",
-				target.name + " takes " + str(abs(damage)) + " damage!!",
-			]
+			total_dmg = target.heal_hurt(damage)
+			
+			if total_dmg < 0:
+				text = [
+					actor.name + " wacks " + target.name + "!!",
+					target.name + " takes " + str(abs(total_dmg)) + " damage!!",
+				]
+			elif total_dmg == 0:
+				text = [
+					actor.name + " wacks " + target.name + "!!",
+					actor.name + " misses!"
+				]
+			
 			if target.hp <= 0:
 				text.append(target.name + " is defeated!!")
 		DEFEND:
+			actor.defend()
 			text = [actor.name + " defends!!"]
 		_:
 			pass
@@ -126,17 +135,21 @@ func run_event(actor: BattleActor, type: int, target: Object) -> void:
 
 func run_through_event_queue() -> void:
 	for event in event_queue:
-		var actor: BattleActor = event[ACTOR]
+		var actor:  BattleActor = event[ACTOR]
+		var target: BattleActor = event[TARGET]
 		if actor.hp > 0:
 			await run_event(event[ACTOR], event[ACTION_TYPE], event[TARGET])
 	
-	# TODO need to refactor for when we add party members instead of only one player character
-	Data.player.is_defending = false
 	# Check if defeat or victory after queue
-	var defeat: bool = Data.player.hp <= 0
+	var defeat: bool = false
+	for player in Data.party:
+		player.is_defending = false
+		if player.hp > 0:
+			defeat = false
+			
 	if defeat:
 		_dialogue_box.add_text([
-			Data.player.name + " loses the will to continue :("
+			"The party loses the will to continue :("
 		])
 		await _dialogue_box.closed
 		debug_reload()
@@ -151,8 +164,8 @@ func run_through_event_queue() -> void:
 	
 	if victory:
 		_dialogue_box.add_text([
-			Data.player.name + " receives " + str(xp_gained) + " XP!",
-			Data.player.name + " receives " + str(gold_gained) + " gold!",
+			"The party receives " + str(xp_gained) + " XP!",
+			"The party receives " + str(gold_gained) + " gold!",
 			# TODO item drops here
 		])
 		await _dialogue_box.closed
@@ -168,20 +181,10 @@ func run_through_event_queue() -> void:
 		_dialogue_box.hide()
 		animate_box(_bottom, false, 0)		
 
-func _on_menu_button_pressed(button: BaseButton) -> void:
-	match button.text:
-		"Attack":
-			current_action = ATTACK
-			_enemies_menu.focus_button()
-		_:
-			pass
-
-func _on_enemies_menu_button_pressed(enemy_button: Enemy_Button) -> void:
-	add_event(Data.player, current_action, enemy_button.battle_actor)
-	
+func next_player() -> void:
 	# If not last player, goes to next
 	current_player_index += 1
-	if current_player_index < party.size():
+	if current_player_index < Data.party.size():
 		_options_menu.focus_button()
 	else:
 		var focus_owner: Control = get_viewport().gui_get_focus_owner()
@@ -192,7 +195,7 @@ func _on_enemies_menu_button_pressed(enemy_button: Enemy_Button) -> void:
 		
 		# Each enemy does an action
 		for enemy_btn in _enemies_menu._buttons:
-			add_event(enemy_btn.battle_actor, Util.choose_weighted([ATTACK, 5, DEFEND, 2]), Util.choose(party))
+			add_event(enemy_btn.battle_actor, Util.choose_weighted([ATTACK, 5, DEFEND, 2]), Util.choose(Data.party))
 		
 		# Sort by speed with slight randomness
 		sort_events()
@@ -207,6 +210,22 @@ func _on_enemies_menu_button_pressed(enemy_button: Enemy_Button) -> void:
 		_dialogue_box.global_position.y = _bottom_exit_y
 		animate_box(_dialogue_box, false, -16)
 		_dialogue_box.show()
+
+func _on_menu_button_pressed(button: BaseButton) -> void:
+	match button.text:
+		"Attack":
+			current_action = ATTACK
+			_enemies_menu.focus_button()
+		"Defend":
+			current_action = DEFEND
+			add_event(Data.party[current_player_index], current_action, null)
+			next_player()
+		_:
+			pass
+
+func _on_enemies_menu_button_pressed(enemy_button: Enemy_Button) -> void:
+	add_event(Data.party[current_player_index], current_action, enemy_button.battle_actor)
+	next_player()
 
 func _on_player_hp_changed(_hp: int, value_changed: int) -> void:
 	if value_changed < 0:

@@ -25,11 +25,7 @@ func _process(_delta: float) -> void:
 func set_battle_actor(_battle_actor: BattleActor) -> void:
 	if _battle_actor:
 		battle_actor = _battle_actor.duplicate_custom()
-		
-		var callable = Callable()
-		callable = Callable(self, "_on_battle_actor_hp_changed")
-		battle_actor.connect("hp_changed", callable)
-		
+		battle_actor.hp_changed.connect(_on_battle_actor_hp_changed)
 		texture_normal = battle_actor.texture
 	else:
 		queue_free()
@@ -46,6 +42,8 @@ func _on_battle_actor_hp_changed(hp: int, value_changed: int) -> void:
 	owner.add_child(inst)
 	inst.init(value_changed, self)
 	
+	print(battle_actor.name + " - HP= " + str(hp))
+	
 	# Taking damage
 	if value_changed < 0:
 		set_process(true)
@@ -55,9 +53,9 @@ func _on_battle_actor_hp_changed(hp: int, value_changed: int) -> void:
 		self_modulate.a = 1.0
 	
 	# Enemy defeated
-	if hp == 0:
+	if hp <= 0:
 		focus_mode = FOCUS_NONE
-		emit_signal("defeated")
+		defeated.emit()
 		_animation_player.play("exit")
 		await _animation_player.animation_finished
 		queue_free()

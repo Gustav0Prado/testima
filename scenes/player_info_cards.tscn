@@ -1,0 +1,36 @@
+[gd_scene load_steps=3 format=3 uid="uid://d3w0n6nwq4krp"]
+
+[ext_resource type="Script" uid="uid://bxbj52mhwfqxc" path="res://scripts/player_info_cards.gd" id="1_1abd2"]
+[ext_resource type="PackedScene" uid="uid://cbwd31unysn3p" path="res://scenes/player_info_card.tscn" id="2_wbvpt"]
+
+[node name="PlayerInfoCards" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = -2.0
+offset_right = 63.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = -5
+script = ExtResource("1_1abd2")
+
+[node name="PlayerInfoCard" parent="." instance=ExtResource("2_wbvpt")]
+visible = false
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="PlayerInfoCard2" parent="." instance=ExtResource("2_wbvpt")]
+visible = false
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="PlayerInfoCard3" parent="." instance=ExtResource("2_wbvpt")]
+visible = false
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="PlayerInfoCard4" parent="." instance=ExtResource("2_wbvpt")]
+visible = false
+layout_mode = 2
+size_flags_vertical = 0

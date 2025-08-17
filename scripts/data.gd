@@ -1,12 +1,12 @@
 extends Node
 
 var enemies: Dictionary = {
-	# Name | HP | Speed | Strength | Level
-	"Blobby" = BattleActor.new(1, 5, 4, 2),
+	# Name -------------| HP | MP | Speed | Strength | Level
+	"Blobby" = BattleActor.new(1, 0, 5, 4, 2),
 }
 
-#  HP | Speed | Strength | Level
-var player : BattleActor = BattleActor.new(32, 2, 1, 1)
+#  ----------------------| HP | MP | Speed | Strength | Level
+var party: Array = [BattleActor.new(32, 10, 2, 2, 1), BattleActor.new(21, 16, 3, 1)]
 
 func _ready() -> void:
 	# Set keys to enemies
@@ -14,4 +14,5 @@ func _ready() -> void:
 	for key in keys:
 		enemies[key].set_actor_name(key)
 	
-	player.name = "Bongo"
+	party[0].name = "Bango"
+	party[1].name = "Bengo"
