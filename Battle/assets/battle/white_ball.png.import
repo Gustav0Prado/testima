@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7gh23qtoasgg"
-path="res://.godot/imported/cursor_down2.png-8e965e63bf349a3ac65b7a9fabf07cbd.ctex"
+uid="uid://bakhp5m8xyr3x"
+path="res://.godot/imported/white_ball.png-476811e706fbad6f4b7e077a5c109be3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/dialogue/cursor_down2.png"
-dest_files=["res://.godot/imported/cursor_down2.png-8e965e63bf349a3ac65b7a9fabf07cbd.ctex"]
+source_file="res://Battle/assets/battle/white_ball.png"
+dest_files=["res://.godot/imported/white_ball.png-476811e706fbad6f4b7e077a5c109be3.ctex"]
 
 [params]
 

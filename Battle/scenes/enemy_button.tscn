@@ -1,8 +1,8 @@
 [gd_scene load_steps=9 format=3 uid="uid://l0728me87hbv"]
 
-[ext_resource type="Texture2D" uid="uid://x2muhxw0sij2" path="res://assets/battle/enemies/Blobby.png" id="1_0ajkp"]
-[ext_resource type="Material" uid="uid://fjpdag6ru8lx" path="res://assets/highlight.tres" id="1_l0du3"]
-[ext_resource type="Script" uid="uid://6l7fogejgcvr" path="res://scripts/enemy_button.gd" id="2_0neql"]
+[ext_resource type="Texture2D" uid="uid://x2muhxw0sij2" path="res://Battle/assets/battle/enemies/Blobby.png" id="1_0ajkp"]
+[ext_resource type="Material" uid="uid://fjpdag6ru8lx" path="res://Battle/assets/highlight.tres" id="1_l0du3"]
+[ext_resource type="Script" uid="uid://6l7fogejgcvr" path="res://Battle/scripts/enemy_button.gd" id="2_0neql"]
 
 [sub_resource type="Animation" id="Animation_l0du3"]
 length = 0.001

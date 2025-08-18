@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cbwd31unysn3p"]
 
-[ext_resource type="Script" uid="uid://dhcixp2y1l34h" path="res://scripts/player_info_card.gd" id="1_yb0l3"]
+[ext_resource type="Script" uid="uid://dhcixp2y1l34h" path="res://Battle/scripts/player_info_card.gd" id="1_yb0l3"]
 
 [node name="PlayerInfoCard" type="HBoxContainer"]
 offset_right = 87.0

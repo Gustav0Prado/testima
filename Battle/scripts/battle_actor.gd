@@ -34,7 +34,7 @@ func _init(_hp: int = hp_max, _mp: int = mp_max, _speed: int = speed, _strength:
 func set_actor_name(_name: String) -> void:
 	#name = _name.to_lower()
 	name = _name
-	texture = load("res://assets/battle/enemies/" + name + ".png")
+	texture = load("res://Battle/assets/battle/enemies/" + name + ".png")
 
 func heal_hurt(value: int) -> int:
 	if value == 0:

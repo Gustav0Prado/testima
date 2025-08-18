@@ -1,9 +1,9 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://fjpdag6ru8lx"]
 
-[ext_resource type="Shader" uid="uid://c7t03pajwtthu" path="res://assets/highlight.gdshader" id="1_vvum4"]
+[ext_resource type="Shader" uid="uid://c7t03pajwtthu" path="res://Battle/assets/highlight.gdshader" id="1_vvum4"]
 
 [resource]
 resource_local_to_scene = true
 shader = ExtResource("1_vvum4")
-shader_parameter/active = true
+shader_parameter/active = false
 shader_parameter/fade = 1.0

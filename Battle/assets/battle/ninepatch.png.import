@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://x2muhxw0sij2"
-path="res://.godot/imported/Blobby.png-93d690f665b74b7c9f76657b933063ec.ctex"
+uid="uid://de3q5fjuwurna"
+path="res://.godot/imported/ninepatch.png-0b3486bdde8a72f7d0857bfcfc9b91f9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/battle/enemies/Blobby.png"
-dest_files=["res://.godot/imported/Blobby.png-93d690f665b74b7c9f76657b933063ec.ctex"]
+source_file="res://Battle/assets/battle/ninepatch.png"
+dest_files=["res://.godot/imported/ninepatch.png-0b3486bdde8a72f7d0857bfcfc9b91f9.ctex"]
 
 [params]
 

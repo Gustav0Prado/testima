@@ -2,7 +2,7 @@ class_name Enemy_Button extends TextureButton
 
 signal defeated
 
-const HIT_TEXT: PackedScene = preload("res://scenes/hit_text.tscn")
+const HIT_TEXT: PackedScene = preload("res://Battle/scenes/hit_text.tscn")
 
 @onready var _hit: Timer = $Hit
 @onready var _animation_player: AnimationPlayer = $AnimationPlayer

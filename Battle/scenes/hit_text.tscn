@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c0fjo1yc5838h"]
 
-[ext_resource type="Script" uid="uid://b5cxyhj3okdue" path="res://scripts/hit_text.gd" id="1_13n2x"]
+[ext_resource type="Script" uid="uid://b5cxyhj3okdue" path="res://Battle/scripts/hit_text.gd" id="1_13n2x"]
 
 [node name="HitText" type="Label"]
 offset_right = 12.0

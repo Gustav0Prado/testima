@@ -1,6 +1,6 @@
 extends Node
 
-const SCREEN_FLASH: PackedScene = preload("res://scenes/screen_flash.tscn")
+const SCREEN_FLASH: PackedScene = preload("res://Battle/scenes/screen_flash.tscn")
 
 func screen_flash(node: Node, animation: String) -> void:
 	var inst: ScreenFlash = SCREEN_FLASH.instantiate()

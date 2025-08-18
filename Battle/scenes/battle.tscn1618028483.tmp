@@ -1,0 +1,198 @@
+[gd_scene load_steps=16 format=3 uid="uid://dio6bbyyqw0oa"]
+
+[ext_resource type="Script" uid="uid://erbwokh55aws" path="res://Battle/scripts/battle.gd" id="1_th188"]
+[ext_resource type="PackedScene" uid="uid://l0728me87hbv" path="res://Battle/scenes/enemy_button.tscn" id="2_a12nh"]
+[ext_resource type="Script" uid="uid://deyp1pxmh7o0h" path="res://Battle/scripts/menu.gd" id="3_p1qf1"]
+[ext_resource type="Texture2D" uid="uid://de3q5fjuwurna" path="res://Battle/assets/battle/ninepatch.png" id="4_4k1nj"]
+[ext_resource type="PackedScene" uid="uid://c78o1qvvc1rg7" path="res://Battle/scenes/enemy_info.tscn" id="4_f4pi3"]
+[ext_resource type="Shader" uid="uid://c7t03pajwtthu" path="res://Battle/assets/highlight.gdshader" id="4_v7i3o"]
+[ext_resource type="PackedScene" uid="uid://c8w2dnx1857qy" path="res://Battle/scenes/dialogue_box.tscn" id="5_lpir7"]
+[ext_resource type="PackedScene" uid="uid://bm8ys4imvne7" path="res://Battle/scenes/shake_camera_2d.tscn" id="6_6vh42"]
+[ext_resource type="PackedScene" uid="uid://d3w0n6nwq4krp" path="res://Battle/scenes/player_info_cards.tscn" id="6_yahae"]
+[ext_resource type="PackedScene" uid="uid://dgfehc6xkh3lm" path="res://Battle/scenes/screen_flash.tscn" id="7_4k1nj"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_66ngm"]
+shader = ExtResource("4_v7i3o")
+shader_parameter/active = false
+shader_parameter/fade = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v7i3o"]
+resource_local_to_scene = true
+shader = ExtResource("4_v7i3o")
+shader_parameter/active = false
+shader_parameter/fade = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_03edq"]
+resource_local_to_scene = true
+shader = ExtResource("4_v7i3o")
+shader_parameter/active = false
+shader_parameter/fade = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_22uqi"]
+resource_local_to_scene = true
+shader = ExtResource("4_v7i3o")
+shader_parameter/active = false
+shader_parameter/fade = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6ni85"]
+resource_local_to_scene = true
+shader = ExtResource("4_v7i3o")
+shader_parameter/active = false
+shader_parameter/fade = 1.0
+
+[node name="Battle" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_th188")
+metadata/_edit_lock_ = true
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+metadata/_edit_lock_ = true
+
+[node name="EnemiesMenu" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+script = ExtResource("3_p1qf1")
+
+[node name="EnemyButton" parent="EnemiesMenu" instance=ExtResource("2_a12nh")]
+material = SubResource("ShaderMaterial_66ngm")
+layout_mode = 2
+
+[node name="EnemyButton2" parent="EnemiesMenu" instance=ExtResource("2_a12nh")]
+material = SubResource("ShaderMaterial_v7i3o")
+layout_mode = 2
+
+[node name="EnemyButton3" parent="EnemiesMenu" instance=ExtResource("2_a12nh")]
+material = SubResource("ShaderMaterial_03edq")
+layout_mode = 2
+
+[node name="EnemyButton4" parent="EnemiesMenu" instance=ExtResource("2_a12nh")]
+material = SubResource("ShaderMaterial_22uqi")
+layout_mode = 2
+
+[node name="EnemyButton5" parent="EnemiesMenu" instance=ExtResource("2_a12nh")]
+material = SubResource("ShaderMaterial_6ni85")
+layout_mode = 2
+
+[node name="Menu" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 135.0
+offset_right = 315.0
+offset_bottom = 175.0
+
+[node name="EnemyInfo" parent="Menu" instance=ExtResource("4_f4pi3")]
+layout_mode = 2
+
+[node name="Options" type="NinePatchRect" parent="Menu"]
+custom_minimum_size = Vector2(100, 36)
+layout_mode = 2
+texture = ExtResource("4_4k1nj")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="Menu" type="HBoxContainer" parent="Menu/Options"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+script = ExtResource("3_p1qf1")
+focus_on_start = true
+
+[node name="Left" type="VBoxContainer" parent="Menu/Options/Menu"]
+layout_mode = 2
+alignment = 1
+
+[node name="Attack" type="Button" parent="Menu/Options/Menu/Left"]
+layout_mode = 2
+text = "Attack"
+flat = true
+
+[node name="Defend" type="Button" parent="Menu/Options/Menu/Left"]
+layout_mode = 2
+text = "Defend"
+flat = true
+
+[node name="Right" type="VBoxContainer" parent="Menu/Options/Menu"]
+layout_mode = 2
+alignment = 1
+
+[node name="Items" type="Button" parent="Menu/Options/Menu/Right"]
+layout_mode = 2
+text = "Items"
+flat = true
+
+[node name="Run" type="Button" parent="Menu/Options/Menu/Right"]
+layout_mode = 2
+text = "Run"
+flat = true
+
+[node name="PlayerInfo" type="NinePatchRect" parent="Menu"]
+custom_minimum_size = Vector2(105, 0)
+layout_mode = 2
+texture = ExtResource("4_4k1nj")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="PlayerInfoCards" parent="Menu/PlayerInfo" instance=ExtResource("6_yahae")]
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 8.0
+offset_top = 0.0
+offset_right = 97.0
+offset_bottom = 37.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="DialogueBox" parent="." instance=ExtResource("5_lpir7")]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -129.0
+offset_top = -55.0
+offset_right = 129.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 0
+handleInput = false
+
+[node name="ShakeCamera2D" parent="." instance=ExtResource("6_6vh42")]
+
+[node name="ScreenFlash" parent="." instance=ExtResource("7_4k1nj")]
+layout_mode = 0
+metadata/_edit_lock_ = true
+
+[connection signal="button_pressed" from="EnemiesMenu" to="." method="_on_enemies_menu_button_pressed"]
+[connection signal="button_focused" from="Menu/Options/Menu" to="." method="_on_menu_button_focused"]
+[connection signal="button_pressed" from="Menu/Options/Menu" to="." method="_on_menu_button_pressed"]

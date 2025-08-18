@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://d3w0n6nwq4krp"]
 
-[ext_resource type="Script" uid="uid://bxbj52mhwfqxc" path="res://scripts/player_info_cards.gd" id="1_1abd2"]
-[ext_resource type="PackedScene" uid="uid://cbwd31unysn3p" path="res://scenes/player_info_card.tscn" id="2_wbvpt"]
+[ext_resource type="Script" uid="uid://bxbj52mhwfqxc" path="res://Battle/scripts/player_info_cards.gd" id="1_1abd2"]
+[ext_resource type="PackedScene" uid="uid://cbwd31unysn3p" path="res://Battle/scenes/player_info_card.tscn" id="2_wbvpt"]
 
 [node name="PlayerInfoCards" type="VBoxContainer"]
 anchors_preset = 15

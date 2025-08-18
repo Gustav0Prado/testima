@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://c78o1qvvc1rg7"]
 
-[ext_resource type="Texture2D" uid="uid://de3q5fjuwurna" path="res://assets/battle/ninepatch.png" id="1_osjie"]
-[ext_resource type="PackedScene" uid="uid://b0i1k6uamgugs" path="res://scenes/enemy_h_box_info.tscn" id="2_4jyb6"]
-[ext_resource type="Script" uid="uid://bdc8uq3mxtjwv" path="res://scripts/enemy_info.gd" id="2_x7lvm"]
-[ext_resource type="Script" uid="uid://cexkpp2beg6pn" path="res://scripts/enemy_h_box_info.gd" id="4_dvu3f"]
+[ext_resource type="Texture2D" uid="uid://de3q5fjuwurna" path="res://Battle/assets/battle/ninepatch.png" id="1_osjie"]
+[ext_resource type="PackedScene" uid="uid://b0i1k6uamgugs" path="res://Battle/scenes/enemy_h_box_info.tscn" id="2_4jyb6"]
+[ext_resource type="Script" uid="uid://bdc8uq3mxtjwv" path="res://Battle/scripts/enemy_info.gd" id="2_x7lvm"]
+[ext_resource type="Script" uid="uid://cexkpp2beg6pn" path="res://Battle/scripts/enemy_h_box_info.gd" id="4_dvu3f"]
 
 [node name="EnemyInfo" type="NinePatchRect"]
 custom_minimum_size = Vector2(100, 0)
