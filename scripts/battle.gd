@@ -238,17 +238,17 @@ func run_through_event_queue() -> void:
 			"The party receives " + str(gold_gained) + " gold!",
 			# TODO item drops here
 			])
+			await _dialogue_box.closed
 			
 			for player: BattleActor in Data.party:
 				player.xp += xp_gained / Data.party.size()
 				player.gold += gold_gained / Data.party.size()
 			
-			await _dialogue_box.closed
-			debug_reload()
+			await debug_reload()
 		DEFEAT:
 			_dialogue_box.add_text(["The party loses the will to continue :("])
 			await _dialogue_box.closed
-			debug_reload()
+			await debug_reload()
 	
 	# Resets defending state
 	for player in Data.party:

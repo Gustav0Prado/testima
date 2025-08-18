@@ -53,7 +53,7 @@ func _on_battle_actor_hp_changed(hp: int, value_changed: int) -> void:
 	# Enemy defeated
 	if hp <= 0:
 		focus_mode = FOCUS_NONE
-		defeated.emit()
+		emit_signal("defeated")
 		_animation_player.play("exit")
 		await _animation_player.animation_finished
 		queue_free()

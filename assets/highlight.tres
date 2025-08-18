@@ -5,5 +5,5 @@
 [resource]
 resource_local_to_scene = true
 shader = ExtResource("1_vvum4")
-shader_parameter/active = false
+shader_parameter/active = true
 shader_parameter/fade = 1.0
