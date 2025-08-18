@@ -17,5 +17,5 @@ func get_enemy_count() -> int:
 	return int(_count.text)
 
 func on_enemy_button_defeated() -> void:
-	print("Enemy defeated")
+	print("defeated!")
 	_count.text = str( int(_count.text)-1 )

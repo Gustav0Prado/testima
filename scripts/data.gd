@@ -5,8 +5,11 @@ var enemies: Dictionary = {
 	"Blobby" = BattleActor.new(1, 0, 5, 4, 2),
 }
 
-#  ----------------------| HP | MP | Speed | Strength | Level
-var party: Array = [BattleActor.new(32, 10, 2, 2, 1), BattleActor.new(21, 16, 3, 1)]
+var party: Array = [
+	# HP | MP | Speed | Strength | Level
+	BattleActor.new(32, 10, 2, 2, 1),
+	BattleActor.new(21, 16, 3, 1),
+]
 
 func _ready() -> void:
 	# Set keys to enemies

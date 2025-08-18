@@ -1,15 +1,10 @@
 TODO
-[] fix bad comparison function: sorting will be broken
-[-] do enemy count check at the end of event queue to decide if victory
-[-] also do player hp checks i.e. 
-[-] Defending
-[] Print player and enemy data on GUI
-	[-] Enemies data
-	[-] Player data
-	[] Indicate active player
-[] Running away
-[] Items and inventory
-[] Item usage
-[-] XP and gold droped from enemies
-	[-] Add these vars to battle_actor
-[] Party
+- FIX ENEMY NUMBERS NOT UPDATING
+- fix bad comparison function: sorting will be broken
+- Move back a player on battle action selection
+- Running away
+- Items and inventory
+- Item usage
+- fix enemy numbers
+- tune defending
+- level up checks and test before battle end

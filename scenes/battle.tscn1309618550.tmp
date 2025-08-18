@@ -1,44 +1,14 @@
-[gd_scene load_steps=16 format=3 uid="uid://dio6bbyyqw0oa"]
+[gd_scene load_steps=10 format=3 uid="uid://dio6bbyyqw0oa"]
 
 [ext_resource type="Script" uid="uid://erbwokh55aws" path="res://scripts/battle.gd" id="1_th188"]
 [ext_resource type="PackedScene" uid="uid://l0728me87hbv" path="res://scenes/enemy_button.tscn" id="2_a12nh"]
 [ext_resource type="Script" uid="uid://deyp1pxmh7o0h" path="res://scripts/menu.gd" id="3_p1qf1"]
 [ext_resource type="Texture2D" uid="uid://de3q5fjuwurna" path="res://assets/battle/ninepatch.png" id="4_4k1nj"]
 [ext_resource type="PackedScene" uid="uid://c78o1qvvc1rg7" path="res://scenes/enemy_info.tscn" id="4_f4pi3"]
-[ext_resource type="Shader" uid="uid://c7t03pajwtthu" path="res://assets/highlight.gdshader" id="4_v7i3o"]
 [ext_resource type="PackedScene" uid="uid://c8w2dnx1857qy" path="res://scenes/dialogue_box.tscn" id="5_lpir7"]
 [ext_resource type="PackedScene" uid="uid://bm8ys4imvne7" path="res://scenes/shake_camera_2d.tscn" id="6_6vh42"]
 [ext_resource type="PackedScene" uid="uid://d3w0n6nwq4krp" path="res://scenes/player_info_cards.tscn" id="6_yahae"]
 [ext_resource type="PackedScene" uid="uid://dgfehc6xkh3lm" path="res://scenes/screen_flash.tscn" id="7_4k1nj"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_66ngm"]
-shader = ExtResource("4_v7i3o")
-shader_parameter/active = false
-shader_parameter/fade = 1.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_v7i3o"]
-resource_local_to_scene = true
-shader = ExtResource("4_v7i3o")
-shader_parameter/active = false
-shader_parameter/fade = 1.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_03edq"]
-resource_local_to_scene = true
-shader = ExtResource("4_v7i3o")
-shader_parameter/active = false
-shader_parameter/fade = 1.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_22uqi"]
-resource_local_to_scene = true
-shader = ExtResource("4_v7i3o")
-shader_parameter/active = false
-shader_parameter/fade = 1.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6ni85"]
-resource_local_to_scene = true
-shader = ExtResource("4_v7i3o")
-shader_parameter/active = false
-shader_parameter/fade = 1.0
 
 [node name="Battle" type="Control"]
 layout_mode = 3
@@ -72,23 +42,18 @@ alignment = 1
 script = ExtResource("3_p1qf1")
 
 [node name="EnemyButton" parent="EnemiesMenu" instance=ExtResource("2_a12nh")]
-material = SubResource("ShaderMaterial_66ngm")
 layout_mode = 2
 
 [node name="EnemyButton2" parent="EnemiesMenu" instance=ExtResource("2_a12nh")]
-material = SubResource("ShaderMaterial_v7i3o")
 layout_mode = 2
 
 [node name="EnemyButton3" parent="EnemiesMenu" instance=ExtResource("2_a12nh")]
-material = SubResource("ShaderMaterial_03edq")
 layout_mode = 2
 
 [node name="EnemyButton4" parent="EnemiesMenu" instance=ExtResource("2_a12nh")]
-material = SubResource("ShaderMaterial_22uqi")
 layout_mode = 2
 
 [node name="EnemyButton5" parent="EnemiesMenu" instance=ExtResource("2_a12nh")]
-material = SubResource("ShaderMaterial_6ni85")
 layout_mode = 2
 
 [node name="Menu" type="HBoxContainer" parent="."]

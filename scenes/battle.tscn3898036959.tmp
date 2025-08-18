@@ -14,31 +14,26 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_66ngm"]
 shader = ExtResource("4_v7i3o")
 shader_parameter/active = false
-shader_parameter/fade = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v7i3o"]
 resource_local_to_scene = true
 shader = ExtResource("4_v7i3o")
 shader_parameter/active = false
-shader_parameter/fade = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_03edq"]
 resource_local_to_scene = true
 shader = ExtResource("4_v7i3o")
 shader_parameter/active = false
-shader_parameter/fade = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_22uqi"]
 resource_local_to_scene = true
 shader = ExtResource("4_v7i3o")
 shader_parameter/active = false
-shader_parameter/fade = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6ni85"]
 resource_local_to_scene = true
 shader = ExtResource("4_v7i3o")
 shader_parameter/active = false
-shader_parameter/fade = 1.0
 
 [node name="Battle" type="Control"]
 layout_mode = 3

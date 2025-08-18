@@ -10,9 +10,6 @@ const HIT_TEXT: PackedScene = preload("res://scenes/hit_text.tscn")
 var battle_actor: BattleActor = null
 
 func _ready() -> void:
-	if !visible:
-		queue_free()
-	
 	_animation_player.play("RESET")
 	set_process(false)
 	
@@ -24,25 +21,26 @@ func _process(_delta: float) -> void:
 
 func set_battle_actor(_battle_actor: BattleActor) -> void:
 	if _battle_actor:
-		battle_actor = _battle_actor.duplicate_custom()
+		show()
+		battle_actor = _battle_actor
 		battle_actor.hp_changed.connect(_on_battle_actor_hp_changed)
 		texture_normal = battle_actor.texture
 	else:
 		queue_free()
 
 func _on_focus_entered() -> void:
-	_animation_player.play("highlight")
+	_animation_player.play("highlight_alt")
 
 func _on_focus_exited() -> void:
 	_animation_player.play("RESET")
+	var shader_material: ShaderMaterial = material
+	shader_material.set_shader_parameter("active", false)
 
 func _on_battle_actor_hp_changed(hp: int, value_changed: int) -> void:
 	# On HP change
 	var inst : HitText = HIT_TEXT.instantiate()
 	owner.add_child(inst)
 	inst.init(value_changed, self)
-	
-	print(battle_actor.name + " - HP= " + str(hp))
 	
 	# Taking damage
 	if value_changed < 0:

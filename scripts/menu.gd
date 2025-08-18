@@ -46,6 +46,9 @@ func connect_buttons_to_object(target: Object, _name: String = name) -> void:
 	button_pressed.connect(callable)
 
 func focus_button(n: int = index) -> void:
+	if _buttons.is_empty():
+		return
+	
 	if disable_focus_on_exit:
 		set_buttons_focus_mode(FOCUS_ALL)
 	
@@ -54,6 +57,13 @@ func focus_button(n: int = index) -> void:
 
 func get_buttons() -> Array:
 	return self._buttons
+
+func is_focused() -> bool:
+	var focus_owner: Control = get_viewport().gui_get_focus_owner()
+	for button in _buttons:
+		if button == focus_owner:
+			return true
+	return false
 
 func _on_Button_focused(button: BaseButton) -> void:
 	emit_signal("button_focused", button)
@@ -64,7 +74,16 @@ func _on_Button_pressed(button: BaseButton) -> void:
 	
 func _on_Button_focus_exited(_button: BaseButton) -> void:
 	await get_tree().process_frame
-	if disable_focus_on_exit and not get_viewport().gui_get_focus_owner() in _buttons:
+	
+	if not is_inside_tree():
+		return
+
+	var vp: Viewport = get_tree().root
+	if vp == null:
+		return
+
+	var focus_owner = vp.gui_get_focus_owner()
+	if disable_focus_on_exit and (focus_owner == null or focus_owner not in _buttons):
 		set_buttons_focus_mode(FOCUS_NONE)
 		
 func _on_Button_tree_exited(button: BaseButton) -> void:

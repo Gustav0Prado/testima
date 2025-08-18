@@ -49,6 +49,10 @@ func heal_hurt(value: int) -> int:
 	
 	return value
 
+func add_mp(value: int) -> void:
+	mp = clampi(mp + value, 0, mp_max)
+	mp_changed.emit(mp)
+
 func speed_roll() -> int:
 	return Util.add_with_random_spread(speed, speed * 0.25)
 

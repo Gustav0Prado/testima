@@ -11,9 +11,15 @@ enum {
 	TARGET
 }
 
+enum {
+	VICTORY,
+	DEFEAT,
+}
+
 const DEFAULT_WAIT_TIME: float = 1.0
 const TWEEN_DURATION: float = 0.5
 
+@onready var _player_info_cards: Array = $Menu/PlayerInfo/PlayerInfoCards.get_children()
 @onready var _enemies_menu: Menu = $EnemiesMenu
 @onready var _options_menu: Menu = $Menu/Options/Menu
 @onready var _bottom: HBoxContainer = $Menu
@@ -27,11 +33,12 @@ const TWEEN_DURATION: float = 0.5
 @export var call_defend_immediately: bool = false
 
 var event_queue: Array = []
-var current_player_index: int = 0
+var current_player_index: int = -1
 var current_action : int = -1
 var xp_gained: int = 0
 var gold_gained: int = 0
-
+var enemies: Array = []
+var end_state: int = -1
 
 func _ready() -> void:
 	# Removes mouse input from the game
@@ -50,19 +57,62 @@ func _ready() -> void:
 	
 	# Connects enemies exit to battle (XP and Gold gain)
 	for enemy_button: Enemy_Button in _enemies_menu.get_buttons():
-		var enemy: BattleActor = Util.choose_weighted([Util.choose(Data.enemies.values()), 3, null, 1])
-		enemy_button.set_battle_actor(enemy)
+		var enemy: BattleActor = Util.choose_weighted([Util.choose(Data.enemies.values()), 3, null, 4])
+		
 		if enemy:
+			enemy = enemy.duplicate_custom()
 			_enemy_info.add_enemy(enemy, enemy_button)
 			enemy_button.defeated.connect(
 				func(): _on_enemy_button_defeated(enemy_button.battle_actor)
 			)
+			enemies.append(enemy)
+			
+		enemy_button.set_battle_actor(enemy)
 	
 	# Starts on options menu first option 
 	_options_menu.focus_button()
+	next_player()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		if _options_menu.is_focused():
+			if event_queue.size() > 0:
+				event_queue.pop_back()
+				next_player(-1)
+			else:
+				# Player error sound
+				pass
+		elif _enemies_menu.is_focused():
+			_options_menu.focus_button()
+	else:
+		return
+	get_viewport().set_input_as_handled()
+
+func enemies_turn() -> void:
+	var focus_owner: Control = get_viewport().gui_get_focus_owner()
+	focus_owner.release_focus()
+	
+	# Each enemy does an action
+	for enemy_btn in _enemies_menu._buttons:
+		add_event(enemy_btn.battle_actor, Util.choose_weighted([ATTACK, 5, DEFEND, 2]), Util.choose(Data.party))
+	
+	# Sort by speed with slight randomness
+	sort_events()
+	
+	# Create animation of menus going down
+	animate_box(_bottom, true, 0)
+	
+	# Runs all events in queue
+	run_through_event_queue()
+	
+	# Animate dialogue box
+	_dialogue_box.global_position.y = _bottom_exit_y
+	animate_box(_dialogue_box, false, -16)
+	_dialogue_box.show()
 
 func debug_reload():
 	_dialogue_box.add_text(["Resetting in 3 seconds..."])
+	await _dialogue_box.closed
 	await get_tree().create_timer(3).timeout
 	get_tree().reload_current_scene()
 
@@ -102,6 +152,23 @@ func run_event(actor: BattleActor, type: int, target: Object) -> void:
 	var damage: int = actor.damage_roll()
 	var total_dmg: int = 0
 	
+	if actor.hp <= 0:
+		return
+	
+	var target_is_player: bool = Data.party.has(target)
+	
+	# If not valid target, then choose new one
+	if target and (target.hp <= 0):
+		target = null
+		
+		var targets: Array = Data.party if target_is_player else enemies
+		for battle_actor: BattleActor in targets:
+			if battle_actor.hp > 0:
+				target = battle_actor
+				break
+		if !target:
+			type = -1
+	
 	match type:
 		ATTACK:
 			total_dmg = target.heal_hurt(damage)
@@ -111,105 +178,115 @@ func run_event(actor: BattleActor, type: int, target: Object) -> void:
 					actor.name + " wacks " + target.name + "!!",
 					target.name + " takes " + str(abs(total_dmg)) + " damage!!",
 				]
+				# If not valid target, then choose new one
+				if target.hp <= 0:
+					text.append(target.name + " is defeated!!")
+					
+					target = null
+					# Check if there are still targets
+					var targets: Array = Data.party if target_is_player else enemies
+					for battle_actor: BattleActor in targets:
+						if battle_actor.hp > 0:
+							target = battle_actor
+							break
 			elif total_dmg == 0:
 				text = [
 					actor.name + " wacks " + target.name + "!!",
 					actor.name + " misses!"
 				]
-			
-			if target.hp <= 0:
-				text.append(target.name + " is defeated!!")
 		DEFEND:
 			actor.defend()
 			text = [actor.name + " defends!!"]
 		_:
 			pass
 
-	_dialogue_box.add_text(text)
-	if auto_advance_text:
-		for _i in range(text.size()):
-			await get_tree().create_timer(DEFAULT_WAIT_TIME).timeout
-			_dialogue_box.advance()
-	else:
-		await _dialogue_box.closed
+	if !text.is_empty():
+		_dialogue_box.add_text(text)
+		if auto_advance_text:
+			for _i in range(text.size()):
+				await get_tree().create_timer(DEFAULT_WAIT_TIME).timeout
+				_dialogue_box.advance()
+		else:
+			await _dialogue_box.closed
+		
+	if !target:
+		end_state = DEFEAT if target_is_player else VICTORY
+		
+		var targets: Array = Data.party if target_is_player else enemies
+		for battle_actor: BattleActor in targets:
+			if battle_actor.hp > 0:
+				end_state = -1
+				break
+		
+		if end_state in [VICTORY, DEFEAT]:
+			event_queue.clear()
+			return
 
 func run_through_event_queue() -> void:
-	for event in event_queue:
-		var actor:  BattleActor = event[ACTOR]
-		var target: BattleActor = event[TARGET]
-		if actor.hp > 0:
-			await run_event(event[ACTOR], event[ACTION_TYPE], event[TARGET])
-	
-	# Check if defeat or victory after queue
-	var defeat: bool = false
-	for player in Data.party:
-		player.is_defending = false
-		if player.hp > 0:
-			defeat = false
-			
-	if defeat:
-		_dialogue_box.add_text([
-			"The party loses the will to continue :("
-		])
-		await _dialogue_box.closed
-		debug_reload()
-		return
-	
-	var victory: bool = true
-	for enemy_button: Enemy_Button in _enemies_menu.get_buttons():
-		enemy_button.battle_actor.is_defending = false
-		if enemy_button.battle_actor.hp > 0:
-			victory = false
+	for i in range(event_queue.size()):
+		if event_queue.is_empty():
+			# Needed beacuse run_event clears event_queue if there are no valid targets left
 			break
+		
+		var event: Array = event_queue[i]
+		await run_event(event[ACTOR], event[ACTION_TYPE], event[TARGET])
 	
-	if victory:
-		_dialogue_box.add_text([
+	match end_state:
+		VICTORY:
+			_dialogue_box.add_text([
 			"The party receives " + str(xp_gained) + " XP!",
 			"The party receives " + str(gold_gained) + " gold!",
 			# TODO item drops here
-		])
-		await _dialogue_box.closed
-		debug_reload()
-		return
-	else:
-		# Clears queue and focus on options menu
-		event_queue.clear()
-		_options_menu.focus_button()
-		
-		# Create animation of menus going up/down
-		animate_box(_dialogue_box, true, 0)
-		_dialogue_box.hide()
-		animate_box(_bottom, false, 0)		
+			])
+			
+			for player: BattleActor in Data.party:
+				player.xp += xp_gained / Data.party.size()
+				player.gold += gold_gained / Data.party.size()
+			
+			await _dialogue_box.closed
+			debug_reload()
+		DEFEAT:
+			_dialogue_box.add_text(["The party loses the will to continue :("])
+			await _dialogue_box.closed
+			debug_reload()
+	
+	# Resets defending state
+	for player in Data.party:
+		player.is_defending = false
+	
+	# Clears queue and focus on options menu
+	event_queue.clear()
+	
+	# Create animation of menus going up/down
+	animate_box(_dialogue_box, true, 0)
+	_dialogue_box.hide()
+	animate_box(_bottom, false, 0)
+	
+	# Restart turns at first player
+	next_player()
 
-func next_player() -> void:
-	# If not last player, goes to next
-	current_player_index += 1
-	if current_player_index < Data.party.size():
-		_options_menu.focus_button()
-	else:
-		var focus_owner: Control = get_viewport().gui_get_focus_owner()
-		focus_owner.release_focus()
-		
-		# Return to first party member
-		current_player_index = 0
-		
-		# Each enemy does an action
-		for enemy_btn in _enemies_menu._buttons:
-			add_event(enemy_btn.battle_actor, Util.choose_weighted([ATTACK, 5, DEFEND, 2]), Util.choose(Data.party))
-		
-		# Sort by speed with slight randomness
-		sort_events()
-		
-		# Create animation of menus going down
-		animate_box(_bottom, true, 0)
-		
-		# Runs all events in queue
-		run_through_event_queue()
-		
-		# Animate dialogue box
-		_dialogue_box.global_position.y = _bottom_exit_y
-		animate_box(_dialogue_box, false, -16)
-		_dialogue_box.show()
+func next_player(dir: int = 1) -> bool:
+	if !is_equal_approx(abs(dir), 1.0):
+		print("Error, next_player dir must be 1 or -1")
+		return false
+	
+	# Disable highlight on old player
+	_player_info_cards[current_player_index].highlight(false)
+	
+	# Finds a valid player
+	while current_player_index >= -1 and current_player_index < Data.party.size()-1:
+		# If not last player, goes to next
+		current_player_index += dir
+	
+		var player: BattleActor = Data.party[current_player_index]
+		if player.hp > 0:
+			_options_menu.focus_button()
+			_player_info_cards[current_player_index].highlight(true)
+			return true
+	
+	# No valid player found
+	current_player_index = -1
+	return false
 
 func _on_menu_button_pressed(button: BaseButton) -> void:
 	match button.text:
@@ -219,13 +296,15 @@ func _on_menu_button_pressed(button: BaseButton) -> void:
 		"Defend":
 			current_action = DEFEND
 			add_event(Data.party[current_player_index], current_action, null)
-			next_player()
+			if !next_player():
+				enemies_turn()
 		_:
 			pass
 
 func _on_enemies_menu_button_pressed(enemy_button: Enemy_Button) -> void:
 	add_event(Data.party[current_player_index], current_action, enemy_button.battle_actor)
-	next_player()
+	if !next_player():
+		enemies_turn()
 
 func _on_player_hp_changed(_hp: int, value_changed: int) -> void:
 	if value_changed < 0:
@@ -235,3 +314,4 @@ func _on_player_hp_changed(_hp: int, value_changed: int) -> void:
 func _on_enemy_button_defeated(battle_actor: BattleActor) -> void:
 	xp_gained += battle_actor.xp
 	gold_gained += battle_actor.gold
+	enemies.erase(battle_actor)
