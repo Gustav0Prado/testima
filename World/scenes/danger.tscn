@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://l7f8cqkdvwkg"]
+
+[ext_resource type="Script" uid="uid://cex3vf3n0r3y7" path="res://World/scripts/danger.gd" id="1_edxoh"]
+
+[node name="Danger" type="Node"]
+script = ExtResource("1_edxoh")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer"]
+offset_right = 21.0
+offset_bottom = 13.0
+
+[node name="Limit" type="Label" parent="CanvasLayer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "00"
+horizontal_alignment = 1

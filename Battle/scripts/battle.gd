@@ -32,6 +32,7 @@ const TWEEN_DURATION: float = 0.5
 @export var auto_advance_text: bool = false
 @export var call_defend_immediately: bool = false
 
+var enemies_weighted: Array = []
 var event_queue: Array = []
 var current_player_index: int = -1
 var current_action : int = -1
@@ -309,7 +310,7 @@ func _on_enemies_menu_button_pressed(enemy_button: Enemy_Button) -> void:
 func _on_player_hp_changed(_hp: int, value_changed: int) -> void:
 	if value_changed < 0:
 		_screen_shake.shake()
-		Util.screen_flash(self, "player_is_hit")
+		Util.screen_flash(self, "player_is_hit", true)
 		
 func _on_enemy_button_defeated(battle_actor: BattleActor) -> void:
 	xp_gained += battle_actor.xp

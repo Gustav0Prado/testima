@@ -1,10 +1,8 @@
 TODO
-- FIX ENEMY NUMBERS NOT UPDATING
+- FIX ENEMY NUMBERS NOT RIGHT
 - fix bad comparison function: sorting will be broken
-- Move back a player on battle action selection
 - Running away
 - Items and inventory
 - Item usage
-- fix enemy numbers
 - tune defending
 - level up checks and test before battle end

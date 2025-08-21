@@ -2,13 +2,15 @@ extends Node
 
 var enemies: Dictionary = {
 	# Name -------------| HP | MP | Speed | Strength | Level
-	"Blobby" = BattleActor.new(1, 0, 5, 4, 2),
+	"Blobby" = BattleActor.new(1, 0, 1, 4, 1),
+	"Bat"    = BattleActor.new(1, 0, 5, 2, 1),
+	"Cocky Roach" = BattleActor.new(1, 5, 2, 3, 2),
 }
 
 var party: Array = [
 	# HP | MP | Speed | Strength | Level
 	BattleActor.new(32, 10, 2, 2, 1),
-	BattleActor.new(21, 16, 3, 1),
+	BattleActor.new(21, 16, 3, 1),  	
 ]
 
 func _ready() -> void:
