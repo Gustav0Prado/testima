@@ -58,7 +58,16 @@ func _ready() -> void:
 	
 	# Connects enemies exit to battle (XP and Gold gain)
 	for enemy_button: Enemy_Button in _enemies_menu.get_buttons():
-		var enemy: BattleActor = Util.choose_weighted([Util.choose(Data.enemies.values()), 3, null, 4])
+		var spawn_chance: float = 1.0 - enemies.size() * 0.20
+		var enemy: BattleActor = null
+		if randf() < spawn_chance:
+			var enemy_string: String = Util.choose_weighted(enemies_weighted)
+			enemy = Data.enemies[enemy_string]
+			
+			enemy_button.set_battle_actor(enemy)
+			enemy = enemy_button.battle_actor
+		else:
+			enemy_button.set_battle_actor(null)
 		
 		if enemy:
 			enemy = enemy.duplicate_custom()
@@ -67,8 +76,6 @@ func _ready() -> void:
 				func(): _on_enemy_button_defeated(enemy_button.battle_actor)
 			)
 			enemies.append(enemy)
-			
-		enemy_button.set_battle_actor(enemy)
 	
 	# Starts on options menu first option 
 	_options_menu.focus_button()
@@ -126,7 +133,7 @@ func animate_box(obj: Object, exit: bool, offset: float):
 
 func sort_events_by_speed(a, b) -> bool:
 	var actor1: BattleActor = a[ACTOR]
-	var actor2: BattleActor = b[ACTOR]
+	var actor2: BattleActor = b[ACTOR]	
 	return actor1.speed_roll() > actor2.speed_roll()
 	
 func sort_defends_to_top(a, b) -> bool:
@@ -245,11 +252,13 @@ func run_through_event_queue() -> void:
 				player.xp += xp_gained / Data.party.size()
 				player.gold += gold_gained / Data.party.size()
 			
-			await debug_reload()
+			#await debug_reload()
+			queue_free()
 		DEFEAT:
 			_dialogue_box.add_text(["The party loses the will to continue :("])
 			await _dialogue_box.closed
-			await debug_reload()
+			#await debug_reload()
+			queue_free()
 	
 	# Resets defending state
 	for player in Data.party:

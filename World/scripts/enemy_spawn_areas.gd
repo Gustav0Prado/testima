@@ -3,11 +3,11 @@ class_name EnemySpawnAreas extends TileMapLayer
 const AREAS_WEIGHTED: Array = [
 	[
 		"Bat", 1,
-		"Slime", 3
+		"Blobby", 3
 	],
 	[
 		"Bat", 2,
-		"Slime", 1,
+		"Blobby", 1,
 		"Cocky Roach", 3
 	],
 ]

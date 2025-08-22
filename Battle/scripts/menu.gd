@@ -14,7 +14,7 @@ signal button_pressed(button: BaseButton)
 
 func _ready() -> void:
 	# Get all buttons
-	if _boxes.size() <= 2:
+	if _boxes.size() == 2:
 		for b: Object in _boxes[0].get_children():
 			_buttons.append(b)
 		for b: Object in _boxes[1].get_children():

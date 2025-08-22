@@ -18,7 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 Data="*res://Battle/scripts/data.gd"
-Util="*res://Battle/scripts/util.gd"
+Util="*res://Util/util.gd"
 
 [display]
 

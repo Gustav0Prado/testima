@@ -91,6 +91,10 @@ layout_mode = 2
 material = SubResource("ShaderMaterial_6ni85")
 layout_mode = 2
 
+[node name="EnemyButton6" parent="EnemiesMenu" instance=ExtResource("2_a12nh")]
+material = SubResource("ShaderMaterial_6ni85")
+layout_mode = 2
+
 [node name="Menu" type="HBoxContainer" parent="."]
 layout_mode = 0
 offset_left = 4.0

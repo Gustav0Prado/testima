@@ -12,7 +12,6 @@ var battle_actor: BattleActor = null
 func _ready() -> void:
 	_animation_player.play("RESET")
 	set_process(false)
-	
 	set_battle_actor(Util.choose(Data.enemies.values()))
 
 # Hit effect

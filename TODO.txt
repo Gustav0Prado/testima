@@ -1,5 +1,4 @@
 TODO
-- FIX ENEMY NUMBERS NOT RIGHT
 - fix bad comparison function: sorting will be broken
 - Running away
 - Items and inventory
