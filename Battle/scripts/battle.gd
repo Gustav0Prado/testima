@@ -62,15 +62,12 @@ func _ready() -> void:
 		var enemy: BattleActor = null
 		if randf() < spawn_chance:
 			var enemy_string: String = Util.choose_weighted(enemies_weighted)
-			enemy = Data.enemies[enemy_string]
+			enemy = Data.enemies[enemy_string].duplicate_custom()
 			
-			enemy_button.set_battle_actor(enemy)
-			enemy = enemy_button.battle_actor
-		else:
-			enemy_button.set_battle_actor(null)
+		enemy_button.set_battle_actor(enemy)
+		enemy = enemy_button.battle_actor
 		
 		if enemy:
-			enemy = enemy.duplicate_custom()
 			_enemy_info.add_enemy(enemy, enemy_button)
 			enemy_button.defeated.connect(
 				func(): _on_enemy_button_defeated(enemy_button.battle_actor)
